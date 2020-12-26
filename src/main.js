@@ -59,11 +59,13 @@ Vue.component('v-select', vSelect)
 // Theme and custom styles
 // -----------------------------------------------------------
 import "../public/theme/css/theme.min.css"
-import '@/../public/static/main.css'
+import '../public/static/main.scss'
+
 
 // -----------------------------------------------------------
 // Vuelidate
 // -----------------------------------------------------------
+
 import { Vuelidate } from 'vuelidate'
 Vue.use(Vuelidate)
 

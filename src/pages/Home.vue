@@ -397,8 +397,6 @@ export default {
 }
 </script>
 <style>
-
-
 .custom-control-label{
   width:100%
 }

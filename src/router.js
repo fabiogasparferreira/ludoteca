@@ -38,10 +38,11 @@ const routes = [
             {
                 path: "/library/",
                 name: "LibraryHome",
-                component: LibraryHome
+                component: LibraryHome,
+                props: {title: 'Library', pretitle: 'leiriacon 2022'}
             },
             {
-                path: "/library/dashboard/",
+                path: "/library/dashboard",
                 name: "LibraryDashboard",
                 beforeEnter: guardAuthenticated,
                 component: LibraryDashboard
@@ -66,16 +67,6 @@ const routes = [
         props: {title: "Withdraw game", pretitle: "Library"},
         beforeEnter: guardAuthenticated,
         component: WithdrawGame
-    },
-    {
-        path: '/library',
-        name: 'library',
-        component: LibraryHome
-    },
-    {
-        path: '/store',
-        name: 'store',
-        component: StoreHome
     },
     {
         path: '/login',

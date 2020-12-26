@@ -1,0 +1,23 @@
+.select2-dropdown, .select2-search__field, .select2-container {
+    border-color: #d2ddec !important;
+}
+
+.select2-container {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.select2-selection {
+    border-width: 0 !important;
+}
+
+.select2-selection__rendered {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.mh-300-px {
+    max-height: 300px;
+}
+
+select:invalid { color: #95aac9; }

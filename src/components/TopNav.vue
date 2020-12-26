@@ -1,60 +1,41 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light" id="topnav">
+
+
+  <b-navbar toggleable="md">
     <b-container>
+      <b-navbar-brand :to="{name: 'Home'}">
+        <img src='@/assets/leiriacon.png'/>
+      </b-navbar-brand>
 
-      <!-- Toggler -->
-      <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar"
-              aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <!-- Brand -->
-      <a class="navbar-brand mr-auto" href="/">
-        <!--            <img src="{% static "bglibrary/img/logo.png" %}" alt="..." class="navbar-brand-img">-->
-      </a>
+      <b-collapse id="nav-collapse" class="w-100" is-nav>
+        <b-navbar-nav>
+          <b-nav-item active-class="active" :to="{ name: 'LibraryHome' }">Ludoteca</b-nav-item>
+          <b-nav-item active-class="active" :to="{ name: 'StoreHome' }">Loja</b-nav-item>
+        </b-navbar-nav>
 
-      <!-- User -->
-      <div class="navbar-user">
-        <!-- Toggle -->
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown toggle-class="pl-0" right text="User">
+            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item href="#">Logout</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
 
-        <div class="d-flex flex-row align-items-center">
-          <div class="d-flex flex-column align-items-end mr-3">
-            <b-link v-if="!isAuthenticated()" class="btn btn-outline-primary" :to="{name: 'Login'}">Login</b-link>
-          </div>
-
-          <div v-if="isAuthenticated()">
-            <UserInfo />
-            <!-- TODO: catch logout event -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Collapse -->
-      <div class="collapse navbar-collapse mr-auto order-lg-first" id="navbar">
-
-        <!-- Navigation -->
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item ">
-            <b-nav-item :to="{ name: 'library' }">Ludoteca</b-nav-item>
-          </li>
-          <li>
-            <b-nav-item :to="{ name: 'store' }">Loja</b-nav-item>
-          </li>
-        </ul>
-      </div>
-
-    </b-container> <!-- / .container -->
-  </nav>
+    </b-container>
+  </b-navbar>
 </template>
 
 <script>
 import usersMixin from '@/mixins/users.mixin'
 import authorizationService from '@/services/authorization.service'
-import UserInfo from "@/components/UserInfo";
+//import UserInfo from "@/components/UserInfo";
 
 export default {
   name: "TopNav",
-  components: {UserInfo},
+  components: {},
   mixins: [usersMixin],
   methods: {
     logout() {

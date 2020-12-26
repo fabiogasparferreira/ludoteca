@@ -15,6 +15,7 @@
     "bootstrap-vue": "^2.x",
     "eslint": "^7.x",
     "eslint-plugin-vue": "^7.x",
+    "feather-icons": "^4.28.0",
     "js-cookie": "^2.x",
     "node-sass": "^5.0.0",
     "popper.js": "^1.x",
@@ -31,8 +32,8 @@
     "@vue/cli-plugin-babel": "4.x",
     "@vue/cli-plugin-eslint": "4.x",
     "@vue/cli-service": "4.x",
-    "vue-template-compiler": "^2.x",
-       "sass-loader": "^10.1.0"
+    "sass-loader": "^10.1.0",
+    "vue-template-compiler": "^2.x"
   },
   "babel": {
     "presets": [
