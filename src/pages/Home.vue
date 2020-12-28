@@ -348,7 +348,7 @@ export default {
     },
     checkoutGames() {
 
-      let promises = this.selected.map(id => libraryService.updateGame(id, {date_checkout: new Date(), location: ''}))
+      let promises = this.selected.map(id => libraryService.deleteGame(id))
 
       Promise.all(promises).then(() => {
         this.$toast('Oh yeah!')
