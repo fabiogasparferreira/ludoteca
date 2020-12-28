@@ -348,7 +348,10 @@ export default {
     },
     checkoutGames() {
 
-      this.$bvModal.msgBoxConfirm('Do you want to check-out the selected game(s)?', {
+      const isOwnerLeiriaCon = this.games.filter(game => game.owner.name == 'leiriacon' && this.selected.includes(game.id)).length
+
+      if (isOwnerLeiriaCon) {
+        this.$bvModal.msgBoxConfirm('Do you want to check-out the selected game(s)?', {
           title: 'Check-out',
           okVariant: 'danger',
           okTitle: 'Yes',
@@ -356,15 +359,22 @@ export default {
         })
         .then(confirmed => {
           if (confirmed) {
-            let promises = this.selected.map(id => libraryService.deleteGame(id))
-
-            Promise.all(promises).then(() => {
-              this.$toast('Oh yeah!')
-              this.bulk = false
-              this.refreshGames()
-            })
+            this.deleteCheckedOutGames()
           }
         })
+      }
+      else {
+        this.deleteCheckedOutGames()
+      }
+    },
+    deleteCheckedOutGames() {
+      let promises = this.selected.map(id => libraryService.deleteGame(id))
+
+      Promise.all(promises).then(() => {
+        this.$toast('Oh yeah!')
+        this.bulk = false
+        this.refreshGames()
+      })
     },
     paginationReset() {
       return {
