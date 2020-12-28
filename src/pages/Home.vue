@@ -348,13 +348,23 @@ export default {
     },
     checkoutGames() {
 
-      let promises = this.selected.map(id => libraryService.deleteGame(id))
+      this.$bvModal.msgBoxConfirm('Do you want to check-out the selected game(s)?', {
+          title: 'Check-out',
+          okVariant: 'danger',
+          okTitle: 'Yes',
+          cancelTitle: 'No',
+        })
+        .then(confirmed => {
+          if (confirmed) {
+            let promises = this.selected.map(id => libraryService.deleteGame(id))
 
-      Promise.all(promises).then(() => {
-        this.$toast('Oh yeah!')
-        this.bulk = false
-        this.refreshGames()
-      })
+            Promise.all(promises).then(() => {
+              this.$toast('Oh yeah!')
+              this.bulk = false
+              this.refreshGames()
+            })
+          }
+        })
     },
     paginationReset() {
       return {
