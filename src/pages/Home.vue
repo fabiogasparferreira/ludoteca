@@ -373,6 +373,7 @@ export default {
       Promise.all(promises).then(() => {
         this.$toast(`Checked-out ${promises.length} game(s)!`)
         this.bulk = false
+        this.unselectAll()
         this.refreshGames()
       })
     },
