@@ -241,6 +241,7 @@ import CheckinModal from "@/components/CheckinModal"
 import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
 import FormSelect from "@/components/FormSelect";
+import axiosUtils from "@/mixins/axios.utils"
 
 export default {
   name: "Home",
@@ -362,6 +363,7 @@ export default {
             this.deleteCheckedOutGames()
           }
         })
+        .catch(error => this.$toast.error('Error checking-out game(s): ' + error))
       }
       else {
         this.deleteCheckedOutGames()
@@ -371,7 +373,12 @@ export default {
       let promises = this.selected.map(id => libraryService.deleteGame(id))
 
       Promise.all(promises).then(() => {
-        this.$toast(`Checked-out ${promises.length} game(s)!`)
+        this.$toast.success(`Checked-out ${promises.length} game(s)!`)
+      })
+      .catch(response => {
+        this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
+      })
+      .finally(() => {
         this.bulk = false
         this.unselectAll()
         this.refreshGames()
