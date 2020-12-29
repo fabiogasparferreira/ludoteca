@@ -351,7 +351,7 @@ export default {
       const isOwnerLeiriaCon = this.games.filter(game => game.owner.name == 'leiriacon' && this.selected.includes(game.id)).length
 
       if (isOwnerLeiriaCon) {
-        this.$bvModal.msgBoxConfirm('Do you want to check-out the selected game(s)?', {
+        this.$bvModal.msgBoxConfirm("You selected games from leiriacon's library. Do you want to check-out?", {
           title: 'Check-out',
           okVariant: 'danger',
           okTitle: 'Yes',
@@ -371,7 +371,7 @@ export default {
       let promises = this.selected.map(id => libraryService.deleteGame(id))
 
       Promise.all(promises).then(() => {
-        this.$toast('Oh yeah!')
+        this.$toast(`Checked-out ${promises.length} game(s)!`)
         this.bulk = false
         this.refreshGames()
       })
