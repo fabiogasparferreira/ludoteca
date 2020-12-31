@@ -29,7 +29,7 @@
 
         <form>
           <div class="px-4 mt-4">
-            <b-alert show variant="warning">E-mail already registered</b-alert>
+            <b-alert :show="emailAlreadyRegistered" variant="warning">E-mail already registered</b-alert>
             <b-form-group invalid-feedback="This field is required" label="Name">
               <b-form-input
                   v-model="form.name"
@@ -74,6 +74,7 @@ import playerService from '@/services/player.service'
 import ModalSelect from "@/components/ModalSelect";
 
 import {email, required} from 'vuelidate/lib/validators'
+import axiosUtils from "@/mixins/axios.utils";
 
 export default {
   name: "ModalPlayerSelect",
@@ -89,7 +90,8 @@ export default {
         name: '',
         email: ''
       },
-      loading: false
+      loading: false,
+      emailAlreadyRegistered: false,
     }
   },
   methods: {
@@ -98,19 +100,31 @@ export default {
       this.isNewPlayer = true;
     },
     search(val) {
+      this.form.name = val
       playerService.searchPlayers(val).then(response => this.players = response)
     },
     onSubmit() {
+      this.emailAlreadyRegistered = false
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
         return;
       } else {
         this.loading = true;
-        playerService.createPlayer(this.form).then((response) => {
-          this.loading = false
-          this.$bvModal.hide(this.id)
-          this.$emit('player-selected', response)
-        })
+        playerService
+            .createPlayer(this.form)
+            .then((response) => {
+              this.$bvModal.hide(this.id)
+              this.$emit('player-selected', response)
+            })
+            .catch(response => {
+              if (response?.response?.data?.email) {
+                this.emailAlreadyRegistered = true
+              }
+              else {
+                this.$toast.error('Error adding player: ' + axiosUtils.getErrorDescription(response));
+              }
+            })
+            .finally(() => this.loading = false)
 
       }
     }
