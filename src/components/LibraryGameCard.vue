@@ -20,12 +20,25 @@
         </div>
       </template>
 
+      <template v-slot:metadata>
+
+        <b-icon-person-fill class="text-muted mr-2"></b-icon-person-fill>
+        <span class=" text-muted">{{ num_players(game.game.min_players, game.game.max_players) }}</span>
+        <b-icon-clock-fill class="ml-4 mr-2 text-muted" font-scale="0.8"></b-icon-clock-fill>
+        <span class=" text-muted">{{ playtime(game.game.min_playtime, game.game.max_playtime) }} </span>
+
+        <b-icon-briefcase-fill class="text-muted ml-4 mr-2"></b-icon-briefcase-fill>
+
+        <span class=" text-muted">{{ game.owner.name }}</span>
+      </template>
+
       <!-- Buttons -->
       <template v-slot:top-right>
         <div v-if="isAuthenticated()" class="d-flex flex-row align-items-center flex-nowrap">
           <b-button v-show="game.status === 'available'" :to=" {name: 'WithdrawGame', params: {id: game.id}}" size="sm"
                     variant="white">
             <span class="text-muted">WITHDRAW</span>
+            <span v-if="game.location" class="text-muted"> ({{ game.location.name }})</span>
           </b-button>
           <b-button v-show="game.status === 'not-checked-in'" v-b-modal.checkin-modal
                     size="sm"
@@ -36,15 +49,9 @@
                     size="sm"
                     variant="white"
                     @click="returnGame(game)">
-            <span class="text-muted">RETURN ({{ game.location }})</span></b-button>
+            <span class="text-muted">RETURN</span>
+            <span class="text-muted" v-if="game.location"> ({{ game.location.name }})</span></b-button>
 
-          <b-dropdown class="ml-1" no-caret size="sm" toggle-class="text-decoration-none" variant="white">
-            <template #button-content>
-              <b-icon-three-dots/>
-            </template>
-            <b-dropdown-item-button>Edit</b-dropdown-item-button>
-            <b-dropdown-item-button>Checkout</b-dropdown-item-button>
-          </b-dropdown>
 
         </div>
 
@@ -61,27 +68,40 @@
 
       </template>
     </GameCard>
-          <CheckinModal id="checkin-modal" :shelves="shelves_options" :game="selectedGame"
-                        v-on:checkin="checkinGame"></CheckinModal>
   </div>
 </template>
 
 <script>
 
 import withdrawService from '@/services/withdraw.service'
-import GameCard from "@/components/GameCard";
-import usersMixin from "@/mixins/users.mixin";
-import CheckinModal from "@/components/CheckinModal";
+import GameCard from "@/components/GameCard"
+import usersMixin from "@/mixins/users.mixin"
+import gamesMixin from "@/mixins/games.mixin"
 
 export default {
 
   name: "LibraryGame",
   components: {
     GameCard,
-    CheckinModal
   },
-  mixins: [usersMixin],
-  props: ['checked', 'value', 'game', 'bulk', 'bgVariant'],
+  mixins: [usersMixin, gamesMixin],
+  props: {
+    checked: {},
+    value: {},
+    game: {
+      default: () => {
+        return {
+          game: {
+            min_players: '',
+            max_players: ''
+          },
+          location: ''
+        }
+      }
+    },
+    bulk: {},
+    bgVariant: {},
+  },
   model: {
     prop: 'checked',
     event: 'input'

@@ -13,11 +13,12 @@
     <!--      >{{ badge.label }}</span>-->
     <!--    </template>-->
     <template v-slot:metadata>
-      <b-icon-person-fill class="text-muted fe fe-users mr-2"></b-icon-person-fill>
-
-      <span class=" text-muted">{{ num_players(game.min_players, game.max_players) }}</span>
-      <b-icon-clock-fill class="ml-4 mr-2 text-muted fe fe-clock" font-scale="0.8"></b-icon-clock-fill>
-      <span class=" text-muted">{{ playtime(game.min_playtime, game.max_playtime) }} </span>
+      <slot name="metadata">
+        <b-icon-person-fill class="text-muted mr-2"></b-icon-person-fill>
+        <span class=" text-muted">{{ num_players(game.min_players, game.max_players) }}</span>
+        <b-icon-clock-fill class="ml-4 mr-2 text-muted" font-scale="0.8"></b-icon-clock-fill>
+        <span class=" text-muted">{{ playtime(game.min_playtime, game.max_playtime) }} </span>
+      </slot>
     </template>
     <template v-slot:top-right>
       <slot name="top-right"></slot>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import ItemCard from "@/components/ItemCard";
+import ItemCard from "@/components/ItemCard"
 import gamesMixin from "@/mixins/games.mixin"
 
 export default {

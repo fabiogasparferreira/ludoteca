@@ -1,6 +1,4 @@
 <template>
-
-
   <b-navbar toggleable="md">
     <b-container>
       <b-navbar-brand :to="{name: 'Home'}">
@@ -17,17 +15,15 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown toggle-class="pl-0" right text="User">
+          <b-nav-item-dropdown toggle-class="pl-0" right :text="$store.getters['users/current'].name">
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Logout</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
-
     </b-container>
   </b-navbar>
 </template>
-
 <script>
 import usersMixin from '@/mixins/users.mixin'
 import authorizationService from '@/services/authorization.service'

@@ -1,21 +1,16 @@
 <template>
-  <b-modal :id="id" title="Checkin">
-    <template #modal-title>
-      <h4 class="mb-0">{{ game.game.name }}</h4>
-    </template>
+  <b-modal no-close-on-backdrop :id="id" :title="game.game.name">
     <template #default>
-      <b-row>
-        <b-col>
-          <b-form-group label="Shelf">
-            <FormSelect
-                v-model="selected"
-                :options="$store.getters['library/locations']"
-                option-text="name"
-                option-value="id">
-            </FormSelect>
-          </b-form-group>
-        </b-col>
-      </b-row>
+      <b-form>
+        <b-form-group label="Shelf">
+          <FormSelect
+              v-model="selected"
+              :options="$store.getters['library/locations']"
+              option-text="name"
+              option-value="id">
+          </FormSelect>
+        </b-form-group>
+      </b-form>
     </template>
 
     <template #modal-footer>
@@ -37,18 +32,21 @@ export default {
   name: "CheckinModal",
   components: {FormSelect},
   props: ['id', 'game', 'shelves'],
-  data: function(){
+  data: function () {
     return {
       selected: ''
     }
   },
   methods: {
     checkin() {
-      libraryService.updateGame(this.game.id, {location: this.selected})
+      libraryService.updateGame(this.game.id, {
+        location_id: this.selected,
+        date_checkin: new Date()
+      })
           .then((response) => {
-            this.$toast.success('Checked-in, place it on ' + this.game.location)
+            this.$toast.success('Success! Place the game on ' + response.location.name)
             this.$bvModal.hide(this.id)
-            this.$emit('checkin', response.data)
+            this.$emit('done')
           })
     }
   }

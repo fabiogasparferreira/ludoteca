@@ -116,22 +116,19 @@
 
     <!-- Content -->
     <div class="mt-4">
-      <b-form-checkbox-group stacked v-model="selectedGames">
-        <b-row v-show="!loading">
-          <!-- Games list -->
+      <b-row v-show="!loading">
 
-          <b-col v-for="(game,index) in games" :key="index" cols="12" lg="6">
-            <b-form-checkbox :value="game.id" :id="game.id" class="d-none">
-              </b-form-checkbox>
-            <label class="w-100" :for="game.id">
-              <LibraryGameCard :bg-variant="selectedGames.includes(game.id) ? 'light' : ''" v-model="selected" :bulk="bulk" :game="game" :value="game.id"
-                               v-on:checkin="checkinGame(game)"/>
-              </label>
-
-          </b-col>
-
-        </b-row>
-      </b-form-checkbox-group>
+        <!-- Games list -->
+        <b-col v-for="(game,index) in games" :key="index" cols="12" lg="6">
+          <LibraryGameCard
+              v-model="selected"
+              :bulk="bulk"
+              :game="game"
+              :value="game.id"
+              v-on:checkin="openLocationModal(game)"
+              v-on:change-location="openLocationModal(game)"/>
+        </b-col>
+      </b-row>
       <!-- Skeleton -->
       <b-row v-show="loading">
         <b-col v-for="(index) in new Array(50)" v-bind:key="index" lg="6" sm="12">
@@ -149,8 +146,11 @@
         </b-col>
       </b-row>
 
-      <CheckinModal id="checkin-modal" :game="selectedGame" :shelves="shelves_options"
-                    v-on:checkin="checkinGame"></CheckinModal>
+      <CheckinModal
+          id="checkin-modal"
+          :game="selectedGame"
+          :shelves="$store.getters['library/locations']"
+          v-on:done="refreshGames"/>
     </div>
 
     <!-- Pagination -->
@@ -266,7 +266,6 @@ export default {
       players: [],
       filters: this.initFilters(),
       filtersOpen: false,
-      shelves_options: ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5', 'C1', 'C2', 'C3', 'C4', 'C5'],
       availability_options: [],
       status_options: [
         {value: 'available', text: 'Available'},
@@ -343,10 +342,6 @@ export default {
         this.players = response
       })
     },
-    checkinGame(game) {
-      this.selectedGame = game
-      this.$bvModal.show('checkin-modal')
-    },
     checkoutGames() {
 
       let promises = this.selected.map(id => libraryService.updateGame(id, {date_checkout: new Date(), location: ''}))
@@ -379,7 +374,11 @@ export default {
           .forEach(key => params[key] = this.filters[key])
 
       return params
-    }
+    },
+    openLocationModal(game) {
+      this.selectedGame = game
+      this.$bvModal.show('checkin-modal')
+    },
   },
 
   watch: {
@@ -400,11 +399,11 @@ export default {
 <style>
 
 
-.custom-control-label{
-  width:100%
+.custom-control-label {
+  width: 100%
 }
 
-.custom-control-input{
+.custom-control-input {
   display: none;
 }
 </style>
