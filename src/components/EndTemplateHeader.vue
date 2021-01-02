@@ -4,7 +4,7 @@
     <div class="header-body">
       <div class="row align-items-center">
         <div class="col d-flex flex-row">
-          <b-link :to="{name: 'Home'}">
+          <b-link :to="{name: 'LibraryHome'}">
             <b-button variant="outline-secondary">
               <b-icon-arrow-left></b-icon-arrow-left>
 

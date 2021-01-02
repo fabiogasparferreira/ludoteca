@@ -241,6 +241,7 @@ import CheckinModal from "@/components/CheckinModal"
 import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
 import FormSelect from "@/components/FormSelect";
+import axiosUtils from "@/mixins/axios.utils"
 
 export default {
   name: "Home",
@@ -344,11 +345,38 @@ export default {
     },
     checkoutGames() {
 
-      let promises = this.selected.map(id => libraryService.updateGame(id, {date_checkout: new Date(), location: ''}))
+      const isOwnerLeiriaCon = this.games.filter(game => game.owner.name == 'leiriacon' && this.selected.includes(game.id)).length
+
+      if (isOwnerLeiriaCon) {
+        this.$bvModal.msgBoxConfirm("You selected games from leiriacon's library. Do you want to check-out?", {
+          title: 'Check-out',
+          okVariant: 'danger',
+          okTitle: 'Yes',
+          cancelTitle: 'No',
+        })
+        .then(confirmed => {
+          if (confirmed) {
+            this.deleteCheckedOutGames()
+          }
+        })
+        .catch(error => this.$toast.error('Error checking-out game(s): ' + error))
+      }
+      else {
+        this.deleteCheckedOutGames()
+      }
+    },
+    deleteCheckedOutGames() {
+      let promises = this.selected.map(id => libraryService.deleteGame(id))
 
       Promise.all(promises).then(() => {
-        this.$toast('Oh yeah!')
+        this.$toast.success(`Checked-out ${promises.length} game(s)!`)
+      })
+      .catch(response => {
+        this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
+      })
+      .finally(() => {
         this.bulk = false
+        this.unselectAll()
         this.refreshGames()
       })
     },

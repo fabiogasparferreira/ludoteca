@@ -22,9 +22,9 @@
           </p>
 
           <!-- Button -->
-          <b-link :to="{name: 'Home'}" class="btn btn-lg btn-primary">
+          <b-button :to="{name: 'LibraryHome'}" size="lg" variant="primary">
             Return to your dashboard
-          </b-link>
+          </b-button>
 
         </div>
 

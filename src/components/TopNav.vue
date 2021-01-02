@@ -1,7 +1,7 @@
 <template>
   <b-navbar toggleable="md">
     <b-container>
-      <b-navbar-brand :to="{name: 'Home'}">
+      <b-navbar-brand :to="{name: 'LibraryHome'}">
         <img src='@/assets/leiriacon.png'/>
       </b-navbar-brand>
 
