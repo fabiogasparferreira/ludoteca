@@ -64,7 +64,7 @@ export default {
      * @returns {Promise<AxiosResponse<any>>}
      */
     deleteGame(gameId) {
-        return authApi.delete(URL + `games/'${gameId}/`)
+        return authApi.delete(URL + `games/${gameId}/`)
             .then(response => response.data)
     },
 
