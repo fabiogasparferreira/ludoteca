@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-from .models import LibraryGame, BggGame, Withdraw, Player, Badge, Location, Supplier
+from .models import LibraryGame, BggGame, Withdraw, Badge, Location, Supplier
 
 User = get_user_model()
 
@@ -21,11 +21,12 @@ class SupplierSerializer(serializers.ModelSerializer):
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Player
-        fields = ('id', 'name', 'email')
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email')
         extra_kwargs = {
             'url': {'view_name': 'players', 'lookup_field': 'id'},
-            'name': {'required': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
             'email': {'required': True}
         }
 
@@ -62,7 +63,7 @@ class LibraryGameSerializer(serializers.ModelSerializer):
     owner = PlayerSerializer(read_only=True)
 
     game_id = serializers.IntegerField(write_only=True, required=True)
-    owner_id = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all(), source="owner", required=True,
+    owner_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source="owner", required=True,
                                                   write_only=True)
 
     current_withdraw = WithdrawBaseSerializer(read_only=True)
@@ -100,7 +101,7 @@ class WithdrawSerializer(serializers.ModelSerializer):
                                                  source='game',
                                                  write_only=True,
                                                  required=True)
-    requisitor_id = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all(),
+    requisitor_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
                                                        source="requisitor",
                                                        required=True,
                                                        write_only=True)

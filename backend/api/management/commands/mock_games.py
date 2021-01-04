@@ -3,10 +3,13 @@ import random
 
 
 from boardgamegeek import BGGClient
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from backend.api.models import LibraryGame, Withdraw, Player, Location
+from backend.api.models import LibraryGame, Withdraw, Location
+
+User = get_user_model()
 
 bgg = BGGClient()
 
@@ -43,7 +46,7 @@ class Command(BaseCommand):
                 game.location = random.choice(shelves)
                 withdraw = Withdraw()
                 withdraw.game = game
-                withdraw.requisitor = random.choice(Player.objects.all())
+                withdraw.requisitor = random.choice(User.objects.all())
                 withdraw.date_withdrawn = timezone.now()
                 withdraw.save()
 

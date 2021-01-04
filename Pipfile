@@ -17,6 +17,7 @@ djangorestframework-simplejwt = "*"
 django-crispy-forms = "*"
 phonenumberslite = "*"
 django-phonenumber-field = "*"
+django-rest-passwordreset = "*"
 
 [dev-packages]
 pylint = "*"

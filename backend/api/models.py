@@ -1,23 +1,23 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser, UserManager
-from django.db import models
 from datetime import timedelta, datetime
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Count
+from django.dispatch import receiver
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.safestring import mark_safe
-from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
+from django_rest_passwordreset.signals import reset_password_token_created
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
-    pass
+    email = models.EmailField(_('email address'), unique=True)
 
-# class CustomUser(AbstractUser):
-#     email = models.EmailField(_('email address'), unique=True)
-#
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 
 class Badge(models.Model):
@@ -39,23 +39,6 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Player(models.Model):
-    name = models.CharField(max_length=100, default=None)
-    email = models.EmailField(default=None, unique=True)
-    username = models.CharField(max_length=100, default=None, null=True, blank=True, unique=True)
-
-    def __str__(self):
-        return self.name
-
-    @staticmethod
-    def most_withdraws(number):
-        return Withdraw.objects.all().values('requisitor__name').annotate(total=Count('requisitor')).order_by('-total')[
-               :number]
-
-    def num_games_owned(self):
-        return self.librarygame_set.count()
 
 
 class BggGame(models.Model):
@@ -85,7 +68,7 @@ class BggGame(models.Model):
 
 
 class Game(models.Model):
-    owner = models.ForeignKey(Player, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     game = models.ForeignKey(BggGame, null=True, blank=True, on_delete=models.CASCADE)
 
@@ -131,7 +114,7 @@ class UsedGame(Game):
 
 
 class Withdraw(models.Model):
-    requisitor = models.ForeignKey(Player, on_delete=models.CASCADE, default=None)
+    requisitor = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     game = models.ForeignKey(LibraryGame, on_delete=models.CASCADE)
     notes = models.TextField(blank=True)
     date_withdrawn = models.DateTimeField(auto_now_add=True)
@@ -166,3 +149,20 @@ class Withdraw(models.Model):
 
         items.sort(key=lambda o: o['date_withdrawn'])
         return items
+
+
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'),
+                                                   reset_password_token.key)
+
+    send_mail(
+        # title:
+        "Password Reset for {title}".format(title="Some website title"),
+        # message:
+        email_plaintext_message,
+        # from:
+        "noreply@somehost.local",
+        # to:
+        [reset_password_token.user.email]
+    )

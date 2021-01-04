@@ -1,12 +1,18 @@
+import csv
 import time
+from io import StringIO
 
 import boardgamegeek
 import pandas as pd
+import requests
 from boardgamegeek import BGGClient
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
-from backend.api.models import BggGame, LibraryGame, Player
+from backend.api.models import BggGame, LibraryGame, Location
 from backend.api.utils import BggGameUtils
+
+User = get_user_model()
 
 bgg = BGGClient()
 
@@ -56,10 +62,10 @@ class Command(BaseCommand):
         return BggGameUtils.create(game.id)
 
     def create_player(self, username):
-        player = Player()
+        player = User()
         player.username = username
         player.email = username + '@' + 'dumbmail.com'
-        player.name = username
+        player.first_name = username
         player.save()
         return player
 
@@ -78,7 +84,7 @@ class Command(BaseCommand):
             bgggame = self.create_bgg(response)
 
         if bgggame:
-            playersfilter = Player.objects.filter(username=owner)
+            playersfilter = User.objects.filter(username=owner)
 
             if playersfilter.count():
                 player = playersfilter.first()
@@ -94,6 +100,45 @@ class Command(BaseCommand):
             print('game not found (' + str(bggid) + ')')
 
     def handle(self, *args, **options):
+        print('------------------------------------')
+        print('-- ludoteca dummy data generation --')
+        print('------------------------------------')
+        # create locations
+        # TODO: Move this to a config file
+
+        print('1. Create locations')
+        locations = [
+            'A1', 'A2', 'A3', 'A4', 'A5',
+            'B1', 'B2', 'B3', 'B4', 'B5',
+            'C1', 'C2', 'C3', 'C4', 'C5',
+            'D1', 'D2', 'D3', 'D4', 'D5',
+            'E1', 'E2', 'E3', 'E4', 'E5',
+            'leiriakidz'
+        ]
+
+        for location in locations:
+            location_object = Location()
+            location_object.name = location
+            location_object.save()
+
+        print('Done')
+
+        # create players
+        print('2. Create users')
+        # TODO: Move this to a config file
+        reader = pd.read_csv('https://my.api.mockaroo.com/players.json?key=5dec1ef0', header=0, delimiter=',')
+        for _, row in reader.iterrows():
+            user = User()
+            user.first_name = row['first_name']
+            user.last_name = row['last_name']
+            user.email = row['email']
+            user.username = row['username']
+            user.save()
+
+        print('Done')
+
+        print('3. Create library games')
+        # load library from file
         skipped = []
         self.stdout.write(options['file'])
         table = pd.read_csv(options['file'], header=0, delimiter=';')
@@ -110,4 +155,4 @@ class Command(BaseCommand):
             else:
                 print('game without id')
 
-        print(skipped)
+        print('Done, games skipped: ' + str(skipped))

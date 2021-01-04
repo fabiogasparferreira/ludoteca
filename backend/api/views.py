@@ -10,8 +10,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt import authentication
 
-from backend.api.filters import LibraryGameFilter, PlayerFilter
-from backend.api.models import LibraryGame, Player, Withdraw, Location, Supplier
+from backend.api.filters import LibraryGameFilter
+from backend.api.models import LibraryGame, Withdraw, Location, Supplier
 from backend.api.serializers import LibraryGameSerializer, UserSerializer, PlayerSerializer, WithdrawSerializer, \
     LocationSerializer, SupplierSerializer
 from backend.api.utils import BggGameUtils
@@ -36,12 +36,11 @@ class SupplierViewSet(viewsets.ModelViewSet):
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
-    queryset = Player.objects.order_by('name')
+    queryset = User.objects.order_by('first_name', 'last_name')
     serializer_class = PlayerSerializer
     authentication_classes = (authentication.JWTAuthentication,)
     filter_backends = (filters.SearchFilter, django_filters.DjangoFilterBackend)
-    filterset_class = PlayerFilter
-    search_fields = ['name', 'email']
+    search_fields = ['first_name', 'last_name', 'username', 'email']
     # permission_classes = (permissions.IsAdminUser,)
 
 
