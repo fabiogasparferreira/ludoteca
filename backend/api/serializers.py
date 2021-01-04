@@ -1,8 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
 from .models import LibraryGame, BggGame, Withdraw, Player, Badge, Location, Supplier
+
+User = get_user_model()
 
 
 class BadgeSerializer(serializers.ModelSerializer):

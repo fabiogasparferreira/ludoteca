@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from datetime import timedelta, datetime
 from django.db import models
@@ -5,6 +7,17 @@ from django.db.models import Count
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import gettext_lazy as _
+
+
+class User(AbstractUser):
+    pass
+
+# class CustomUser(AbstractUser):
+#     email = models.EmailField(_('email address'), unique=True)
+#
+#     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = []
 
 
 class Badge(models.Model):

@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
@@ -15,6 +15,8 @@ from backend.api.models import LibraryGame, Player, Withdraw, Location, Supplier
 from backend.api.serializers import LibraryGameSerializer, UserSerializer, PlayerSerializer, WithdrawSerializer, \
     LocationSerializer, SupplierSerializer
 from backend.api.utils import BggGameUtils
+
+User = get_user_model()
 
 # Serve Vue Application
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
