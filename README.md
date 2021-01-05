@@ -6,7 +6,7 @@
 ![Vue Logo](/src/assets/logo-vue.png "Vue Logo")
 ![Django Logo](/src/assets/logo-django.png "Django Logo")
 
-This template is a minimal example for an application using Vue and Django.
+This application is built with Django and VueJS using this [gtalarico/django-vue-template](https://github.com/gtalarico/django-vue-template)
 
 Vue and Django are clearly separated in this project. Vue, Yarn and Webpack handles all frontend logic and bundling assessments. Django and Django REST framework to manage Data Models, Web API and serve static files.
 
@@ -18,18 +18,6 @@ data at `/api/`, and static files at `/static/`. Django admin panel is also avai
 The application templates from Vue CLI `create` and Django `createproject` are kept as close as possible to their
 original state, except where a different configuration is needed for better integration of the two frameworks.
 
-#### Alternatives
-
-If this setup is not what you are looking for, you might want look at other similar projects:
-
-* [ariera/django-vue-template](https://github.com/ariera/django-vue-template)
-* [vchaptsev/cookiecutter-django-vue](https://github.com/vchaptsev/cookiecutter-django-vue)
-
-Prefer Flask? Checkout my [gtalarico/flask-vuejs-template](https://github.com/gtalarico/flask-vuejs-template)
-
-### Demo
-
-[Live Demo](https://django-vue-template-demo.herokuapp.com/)
 
 ### Includes
 
@@ -126,6 +114,17 @@ PYTHONUNBUFFERED=1;DJANGO_SETTINGS_MODULE=backend.settings.dev
 ```
 
 Click Apply then Ok
+
+## Development data
+
+Included in `backend` folder there is some `.csv` files with example games and players. In order to see some dummy data, run the following scripts (root folder):
+
+```
+python manage.py ludoteca ludoteca.csv
+python manage.py mock_players
+python manage.py mock_games
+```
+
 
 ## Deploy
 

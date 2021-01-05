@@ -19,6 +19,12 @@ class SupplierSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = '__all__'
+
+
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -61,11 +67,13 @@ class WithdrawBaseSerializer(serializers.ModelSerializer):
 class LibraryGameSerializer(serializers.ModelSerializer):
     game = BggGameSerializer(read_only=True)
     owner = PlayerSerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
 
     game_id = serializers.IntegerField(write_only=True, required=True)
     owner_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source="owner", required=True,
                                                   write_only=True)
-
+    location_id = serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(), source="location", required=False,
+                                                     write_only=True)
     current_withdraw = WithdrawBaseSerializer(read_only=True)
 
     class Meta:
@@ -78,6 +86,7 @@ class LibraryGameSerializer(serializers.ModelSerializer):
             'owner_id',
             'notes',
             'location',
+            'location_id',
             'date_checkin',
             'date_checkout',
             'current_withdraw',

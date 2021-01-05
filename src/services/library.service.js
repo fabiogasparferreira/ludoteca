@@ -73,7 +73,7 @@ export default {
      * @returns {Promise<AxiosResponse<any>>}
      */
     getLocations() {
-        return authApi.get(URL+'/locations/')
+        return authApi.get(URL+'locations/')
             .then(response => response.data)
     },
 }

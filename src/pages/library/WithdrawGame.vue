@@ -1,5 +1,5 @@
 <template>
-  <WizardScreen :title="title" back-to="{name: 'Home'}">
+  <WizardScreen :title="title" :back-to="{name: 'LibraryHome'}">
     <template #content>
       <b-form>
         <b-form-group label="Game">
@@ -41,8 +41,10 @@
         <div class="row mt-5">
           <div class="col">
           </div>
+          <b-col cols="auto">
+            <b-button variant="link" size="lg" class="text-muted" :to="{name: 'LibraryHome'}">Cancel</b-button>
+          </b-col>
           <div class="col-auto">
-            <button class="btn btn-lg btn-link text-muted">Cancel</button>
             <button class="btn btn-lg btn-primary " v-on:click="doWithdraw">Finish</button>
           </div>
         </div>

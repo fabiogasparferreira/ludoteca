@@ -21,7 +21,6 @@
     "popper.js": "^1.x",
     "vue": "^2.x",
     "vue-router": "^3.x",
-    "vue-select": "^3.x",
     "vue-toastification": "^1.x",
     "vuelidate": "^0.x",
     "vuex": "^3.x",

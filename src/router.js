@@ -2,16 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import StoreHome from '@/pages/store/Home'
 import LibraryHome from '@/pages/library/Home'
-import Home from '@/pages/Home'
-import Login from "./pages/Login";
+import Login from "./pages/Login"
 
-import HomeTemplate from "@/pages/templates/HomeTemplate";
-import WithdrawGame from "@/pages/library/WithdrawGame";
-import AddGame from "@/pages/library/AddGame";
+import HomeTemplate from "@/pages/templates/HomeTemplate"
+import WithdrawGame from "@/pages/library/WithdrawGame"
+import AddGame from "@/pages/library/AddGame"
 import LibraryDashboard from "@/pages/library/Dashboard"
 
-import authorizationService from "@/services/authorization.service";
-import PageNotFound from "@/pages/PageNotFound";
+import authorizationService from "@/services/authorization.service"
+import PageNotFound from "@/pages/PageNotFound"
 
 Vue.use(VueRouter)
 
@@ -32,8 +31,8 @@ const routes = [
             {
                 path: "/",
                 name: "Home",
-                component: Home,
-                props: {title: 'Library', pretitle: 'leiriacon 2022'}
+                component: LibraryHome,
+                props: { title: 'Library', pretitle: 'leiriacon 2022'}
             },
             {
                 path: "/library/",

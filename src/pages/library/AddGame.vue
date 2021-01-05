@@ -51,9 +51,8 @@
                            placeholder="Eg. expansion included, missing components"></b-form-textarea>
         </b-form-group>
 
-        <hr class="my-5"/>
-        <div class="d-flex flex-row justify-content-end mb-5">
-          <b-button size="lg" variant="white">Cancel</b-button>
+        <div class="d-flex flex-row justify-content-end mt-5">
+          <b-button size="lg" variant="link" class="mr-3 text-muted" :to="{name: 'LibraryHome'}">Cancel</b-button>
           <b-button size="lg" type="submit" variant="primary">Create</b-button>
         </div>
 
