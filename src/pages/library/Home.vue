@@ -153,36 +153,7 @@
           v-on:done="refreshGames"/>
     </div>
 
-    <!-- Pagination -->
-    <b-row v-show="pagination.count > pagination.count_per_page" no-gutters>
-
-      <!-- Pagination (prev) -->
-      <ul class="col list-pagination-prev pagination pagination-tabs justify-content-start">
-        <li class="page-item">
-          <a class="page-link" href="#">
-            <i class="fe fe-arrow-left mr-1"></i> Previous
-          </a>
-        </li>
-      </ul>
-
-      <!-- Pagination -->
-      <ul class="col list-pagination pagination pagination-tabs justify-content-center">
-        <li v-for="(page, index) in pagination.pages" v-bind:key="index"
-            v-bind:class="{ active: pagination.active_page === page }">
-          <b-link v-if="Number.isInteger(page)" class="page" @click="setPage(page)">{{ page }}</b-link>
-          <span v-else class="page">{{ page }}</span>
-        </li>
-      </ul>
-
-      <!-- Pagination (next) -->
-      <ul class="col list-pagination-next pagination pagination-tabs justify-content-end">
-        <li class="page-item">
-          <a class="page-link" href="#">
-            Next <i class="fe fe-arrow-right ml-1"></i>
-          </a>
-        </li>
-      </ul>
-    </b-row>
+    <Pagination v-model="currentPage" :total-count="totalGamesCount"/>
 
     <div class="list-alert alert alert-dark alert-dismissible border fade" role="alert" v-bind:class="{show: bulk}">
 
@@ -242,6 +213,7 @@ import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
 import FormSelect from "@/components/FormSelect";
 import axiosUtils from "@/mixins/axios.utils"
+import Pagination from "@/components/Pagination";
 
 export default {
   name: "Home",
@@ -253,13 +225,6 @@ export default {
       loading: true,
       bulk: false,
       selected: [],
-      pagination: {
-        count: 0,
-        count_per_page: 50,
-        active_page: 1,
-        pages: [],
-        number_pages: 5
-      },
       selectedGame: {
         game: {}
       },
@@ -274,12 +239,13 @@ export default {
         {value: 'not-checked-in', text: 'Not checked-in'},
         {value: 'checked-out', text: 'Checked-out'}
       ],
+      currentPage: 1,
+      totalGamesCount: 0
     }
   },
-  components: {FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
+  components: {Pagination, FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
   mixins: [gamesMixin, usersMixin],
   mounted() {
-    this.pagination = this.paginationReset()
     this.refreshGames()
   },
   methods: {
@@ -292,40 +258,6 @@ export default {
     unselectAll() {
       this.selected = []
     },
-    updatePages() {
-      this.pagination.pages = []
-
-      let current = this.pagination.active_page,
-          last = Math.ceil(this.pagination.count / this.pagination.count_per_page),
-          delta = 2,
-          left = current - delta,
-          right = current + delta + 1,
-          range = [],
-          l;
-
-      for (let i = 1; i <= last; i++) {
-        if (i === 1 || i === last || i >= left && i < right) {
-          range.push(i);
-        }
-      }
-
-      for (let i of range) {
-        if (l) {
-          if (i - l === 2) {
-            this.pagination.pages.push(l + 1);
-          } else if (i - l !== 1) {
-            this.pagination.pages.push('...');
-          }
-        }
-        this.pagination.pages.push(i);
-        l = i;
-      }
-
-    },
-    setPage(number) {
-      this.pagination.active_page = number
-      this.refreshGames()
-    },
     refreshGames() {
       this.loading = true
 
@@ -333,8 +265,7 @@ export default {
 
       libraryService.filterGames(params).then(response => {
         this.games = response.results
-        this.pagination.count = response.count
-        this.updatePages()
+        this.totalGamesCount = response.count
         this.loading = false
       })
     },
@@ -380,19 +311,10 @@ export default {
         this.refreshGames()
       })
     },
-    paginationReset() {
-      return {
-        count: 0,
-        count_per_page: 50,
-        active_page: 1,
-        pages: [],
-        number_pages: 5
-      }
-    },
     getParams() {
       let params = {}
 
-      params['page'] = this.pagination.active_page
+      params['page'] = this.currentPage
 
       if (this.search) {
         params['search'] = this.search
@@ -419,6 +341,9 @@ export default {
       },
       deep: true
 
+    },
+    currentPage() {
+      this.refreshGames()
     }
   },
 
