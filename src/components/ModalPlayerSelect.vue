@@ -116,7 +116,7 @@ export default {
           email: this.form.email
         }
 
-        // In case only one name is was inserted
+        // In case only one name is inserted
         if (this.form.name.indexOf(' ') < 0) {
           player['first_name'] = this.form.name
 
