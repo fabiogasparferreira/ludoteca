@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from backend.api.models import LibraryGame, Withdraw, Location, CustomUser
+from backend.api.models import LibraryGame, Withdraw, Location, User
 
 
 class Command(BaseCommand):
@@ -11,9 +11,9 @@ class Command(BaseCommand):
 
         for g in LibraryGame.objects.all():
             g.delete()
-        #
-        # for p in CustomUser.objects.filter():
-        #     p.delete()
+
+        for p in User.objects.filter(is_superuser=False):
+            p.delete()
 
         for l in Location.objects.all():
             l.delete()
