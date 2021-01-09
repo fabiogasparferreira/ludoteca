@@ -51,8 +51,6 @@
                     @click="returnGame(game)">
             <span class="text-muted">RETURN</span>
             <span class="text-muted" v-if="game.location"> ({{ game.location.name }})</span></b-button>
-
-
         </div>
 
       </template>
@@ -77,6 +75,7 @@ import withdrawService from '@/services/withdraw.service'
 import GameCard from "@/components/GameCard"
 import usersMixin from "@/mixins/users.mixin"
 import gamesMixin from "@/mixins/games.mixin"
+import personMixin from "@/mixins/person.mixin"
 
 export default {
 
@@ -84,7 +83,7 @@ export default {
   components: {
     GameCard,
   },
-  mixins: [usersMixin, gamesMixin],
+  mixins: [usersMixin, gamesMixin, personMixin],
   props: {
     checked: {},
     value: {},

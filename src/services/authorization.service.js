@@ -17,9 +17,9 @@ export default {
  * @param password
  * @returns {Promise<AxiosResponse<any>>}
  */
-function doLogin(username, password) {
+function doLogin(email, password) {
   return unauthApi.post(URL, {
-    username: username,
+    email: email,
     password: password
   });
 }

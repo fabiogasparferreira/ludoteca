@@ -30,14 +30,15 @@
         <form>
           <div class="px-4 mt-4">
             <b-alert :show="emailAlreadyRegistered" variant="warning">E-mail already registered</b-alert>
-            <b-form-group invalid-feedback="This field is required" label="Name">
+            <b-form-group
+                invalid-feedback="This field is required"
+                label="Name">
               <b-form-input
                   v-model="form.name"
                   :state="validateState('name')"
-                  placeholder="Full name"
+                  placeholder="Name"
                   type="text"/>
             </b-form-group>
-
             <b-form-group invalid-feedback="Please insert a valid e-mail address" label="E-mail">
               <b-form-input
                   v-model="form.email"
@@ -110,8 +111,24 @@ export default {
         return;
       } else {
         this.loading = true;
+
+        let player = {
+          email: this.form.email
+        }
+
+        // In case only one name is was inserted
+        if (this.form.name.indexOf(' ') < 0) {
+          player['first_name'] = this.form.name
+
+          // If more than one name was inserted
+          // Break on first space, use first element as first name and all the others use as last name
+        } else {
+          player['first_name'] = this.form.name.substring(0, this.form.name.indexOf(' '))
+          player['last_name'] = this.form.name.substring(this.form.name.indexOf(' ') + 1, this.form.name.length)
+        }
+
         playerService
-            .createPlayer(this.form)
+            .createPlayer(player)
             .then((response) => {
               this.$bvModal.hide(this.id)
               this.$emit('player-selected', response)
@@ -119,8 +136,7 @@ export default {
             .catch(response => {
               if (response?.response?.data?.email) {
                 this.emailAlreadyRegistered = true
-              }
-              else {
+              } else {
                 this.$toast.error('Error adding player: ' + axiosUtils.getErrorDescription(response));
               }
             })

@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-
 from rest_framework import serializers
 
 from .models import LibraryGame, BggGame, Withdraw, Badge, Location, Supplier
@@ -26,15 +25,20 @@ class LocationSerializer(serializers.ModelSerializer):
 
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
+    name = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email')
+        fields = ('id', 'first_name', 'last_name', 'name', 'email', 'username')
         extra_kwargs = {
             'url': {'view_name': 'players', 'lookup_field': 'id'},
             'first_name': {'required': True},
-            'last_name': {'required': True},
-            'email': {'required': True}
+            'email': {'required': True},
+            'username': {'required': True}
         }
+
+    def get_name(self, obj: User):
+        return " ".join(filter(None, [obj.first_name, obj.last_name]))
 
 
 class BggGameSerializer(serializers.ModelSerializer):

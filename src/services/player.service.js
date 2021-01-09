@@ -19,6 +19,7 @@ export default {
         }).then(response => response.data)
     },
     createPlayer(payload) {
+        payload['username'] = payload.email
         return authApi.post(URL, payload)
             .then(response => response.data)
     },

@@ -16,12 +16,12 @@
 
 <script>
 import ItemCard from "@/components/ItemCard";
-import usersMixin from "@/mixins/users.mixin";
+import personMixin from "@/mixins/person.mixin";
 
 export default {
   name: "PersonCard",
   components: {ItemCard},
-  mixins: [usersMixin],
+  mixins: [personMixin],
   props: ['person']
 }
 </script>

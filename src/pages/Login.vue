@@ -24,8 +24,7 @@
             <b-form-group label="E-mail">
 
               <!-- Input -->
-              <b-form-input v-model="username"
-                            lab
+              <b-form-input v-model="email"
                             placeholder="Enter your e-mail"
                             tabindex="1"
                             type="text"/>
@@ -85,27 +84,27 @@
 <script>
 
 import axiosUtils from "@/mixins/axios.utils"
+import authorizationService from "@/services/authorization.service";
+import router from "@/router";
 
 export default {
   name: "Login",
   data: function () {
     return {
-      username: '',
+      email: '',
       password: ''
     }
   },
   methods: {
     doLogin() {
       this.loading = true;
-      let username = this.username;
-      let password = this.password;
-      this.$store
-          .dispatch("login", {username, password})
-          .then(() => this.$toast.info('Welcome back!'))
-          .catch(response => {
-            this.$toast.error(axiosUtils.getErrorDescription(response));
-          })
-          .finally(() => (this.loading = false));
+
+      return authorizationService.doLogin(this.email, this.password).then(response => {
+        this.$store.commit("AUTH_SUCCESS", response.data);
+        this.$store.dispatch("users/loadCurrent").then(() => router.push({name: "LibraryHome"}))
+      }).catch(response => {
+        this.$toast.error(axiosUtils.getErrorDescription(response));
+      }).finally(() => (this.loading = false));
     }
   }
 }
