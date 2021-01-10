@@ -8,7 +8,7 @@
       item-metadata="email"
       item-title="name"
       @search="search"
-      @selected="$emit('player-selected', $event)"
+      @done="$emit('player-selected', $event)"
   >
     <template v-if="isNewPlayer" v-slot:header>
       <div class="d-flex flex-row align-items-center justify-content-between flex-fill">
@@ -86,7 +86,7 @@ export default {
     return {
       isNewPlayer: false,
       selectedPlayer: undefined,
-      players: [],
+      players: this.$store.getters["library/players"],
       form: {
         name: '',
         email: ''

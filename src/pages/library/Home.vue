@@ -70,6 +70,8 @@
                       option-text="name"
                       option-value="id"
                   />
+
+
                 </b-form-group>
               </b-col>
 
@@ -77,13 +79,27 @@
               <b-col lg="6" sm="12">
                 <b-form-group label="Owner">
 
-                  <FormSelect
-                      v-model="filters['player']"
-                      :options="$store.getters['library/players']"
-                      option-text="name"
-                      option-value="id"
-                      @search="searchPlayers"
+                  <div>{{ filters['player'] }}
+                    <b-button v-b-modal.players-filter variant="white">Add</b-button>
+                  </div>
+                  <ModalSelect
+                      id="players-filter"
+                      :items="$store.getters['library/players']"
+                      title="Select a player"
+                      item-metadata="email"
+                      item-title="name"
+                      :multiple="true"
                   />
+
+
+
+                  <!--                  <FormSelect-->
+                  <!--                      v-model="filters['player']"-->
+                  <!--                      :options="$store.getters['library/players']"-->
+                  <!--                      option-text="name"-->
+                  <!--                      option-value="id"-->
+                  <!--                      @search="searchPlayers"-->
+                  <!--                  />-->
                 </b-form-group>
               </b-col>
 
@@ -242,6 +258,7 @@ import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
 import FormSelect from "@/components/FormSelect";
 import axiosUtils from "@/mixins/axios.utils"
+import ModalSelect from "@/components/ModalSelect";
 
 export default {
   name: "Home",
@@ -276,7 +293,7 @@ export default {
       ],
     }
   },
-  components: {FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
+  components: {ModalSelect, FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
   mixins: [gamesMixin, usersMixin],
   mounted() {
     this.pagination = this.paginationReset()
@@ -354,14 +371,13 @@ export default {
           okTitle: 'Yes',
           cancelTitle: 'No',
         })
-        .then(confirmed => {
-          if (confirmed) {
-            this.deleteCheckedOutGames()
-          }
-        })
-        .catch(error => this.$toast.error('Error checking-out game(s): ' + error))
-      }
-      else {
+            .then(confirmed => {
+              if (confirmed) {
+                this.deleteCheckedOutGames()
+              }
+            })
+            .catch(error => this.$toast.error('Error checking-out game(s): ' + error))
+      } else {
         this.deleteCheckedOutGames()
       }
     },
@@ -371,14 +387,14 @@ export default {
       Promise.all(promises).then(() => {
         this.$toast.success(`Checked-out ${promises.length} game(s)!`)
       })
-      .catch(response => {
-        this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
-      })
-      .finally(() => {
-        this.bulk = false
-        this.unselectAll()
-        this.refreshGames()
-      })
+          .catch(response => {
+            this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
+          })
+          .finally(() => {
+            this.bulk = false
+            this.unselectAll()
+            this.refreshGames()
+          })
     },
     paginationReset() {
       return {

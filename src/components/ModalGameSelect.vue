@@ -8,7 +8,7 @@
       item-metadata="year"
       item-title="name"
       @search="search"
-      @selected="$emit('game-selected', $event)">
+      @done="$emit('game-selected', $event)">
   </ModalSelect>
 </template>
 

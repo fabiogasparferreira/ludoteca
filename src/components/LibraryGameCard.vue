@@ -8,7 +8,7 @@
       <template v-slot:image>
         <div class="position-relative">
           <div v-if="bulk" class="p-0 position-absolute d-flex text-center justify-content-center align-items-center"
-               style="background-color: rgba(255,255,255,0.9); z-index: 1; top:0; left:0; right:0;bottom:0;">
+               style="background-color: rgba(255,255,255,0.9); z-index: 1; top:0; left:0; right:0; bottom:0;">
 
             <b-button v-if="game.status === 'available'" :pressed="checked.includes(value)" variant="outline-dark"
                       @click="click">
