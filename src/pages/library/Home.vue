@@ -70,8 +70,6 @@
                       option-text="name"
                       option-value="id"
                   />
-
-
                 </b-form-group>
               </b-col>
 
@@ -90,16 +88,6 @@
                       item-title="name"
                       :multiple="true"
                   />
-
-
-
-                  <!--                  <FormSelect-->
-                  <!--                      v-model="filters['player']"-->
-                  <!--                      :options="$store.getters['library/players']"-->
-                  <!--                      option-text="name"-->
-                  <!--                      option-value="id"-->
-                  <!--                      @search="searchPlayers"-->
-                  <!--                  />-->
                 </b-form-group>
               </b-col>
 
@@ -169,36 +157,7 @@
           v-on:done="refreshGames"/>
     </div>
 
-    <!-- Pagination -->
-    <b-row v-show="pagination.count > pagination.count_per_page" no-gutters>
-
-      <!-- Pagination (prev) -->
-      <ul class="col list-pagination-prev pagination pagination-tabs justify-content-start">
-        <li class="page-item">
-          <a class="page-link" href="#">
-            <i class="fe fe-arrow-left mr-1"></i> Previous
-          </a>
-        </li>
-      </ul>
-
-      <!-- Pagination -->
-      <ul class="col list-pagination pagination pagination-tabs justify-content-center">
-        <li v-for="(page, index) in pagination.pages" v-bind:key="index"
-            v-bind:class="{ active: pagination.active_page === page }">
-          <b-link v-if="Number.isInteger(page)" class="page" @click="setPage(page)">{{ page }}</b-link>
-          <span v-else class="page">{{ page }}</span>
-        </li>
-      </ul>
-
-      <!-- Pagination (next) -->
-      <ul class="col list-pagination-next pagination pagination-tabs justify-content-end">
-        <li class="page-item">
-          <a class="page-link" href="#">
-            Next <i class="fe fe-arrow-right ml-1"></i>
-          </a>
-        </li>
-      </ul>
-    </b-row>
+    <Pagination v-model="currentPage" :total-count="totalGamesCount"/>
 
     <div class="list-alert alert alert-dark alert-dismissible border fade" role="alert" v-bind:class="{show: bulk}">
 
@@ -258,6 +217,7 @@ import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
 import FormSelect from "@/components/FormSelect";
 import axiosUtils from "@/mixins/axios.utils"
+import Pagination from "@/components/Pagination";
 import ModalSelect from "@/components/ModalSelect";
 
 export default {
@@ -291,12 +251,13 @@ export default {
         {value: 'not-checked-in', text: 'Not checked-in'},
         {value: 'checked-out', text: 'Checked-out'}
       ],
+      currentPage: 1,
+      totalGamesCount: 0
     }
   },
-  components: {ModalSelect, FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
+  components: {Pagination, ModalSelect, FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
   mixins: [gamesMixin, usersMixin],
   mounted() {
-    this.pagination = this.paginationReset()
     this.refreshGames()
   },
   methods: {
@@ -350,8 +311,7 @@ export default {
 
       libraryService.filterGames(params).then(response => {
         this.games = response.results
-        this.pagination.count = response.count
-        this.updatePages()
+        this.totalGamesCount = response.count
         this.loading = false
       })
     },
@@ -387,14 +347,14 @@ export default {
       Promise.all(promises).then(() => {
         this.$toast.success(`Checked-out ${promises.length} game(s)!`)
       })
-          .catch(response => {
-            this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
-          })
-          .finally(() => {
-            this.bulk = false
-            this.unselectAll()
-            this.refreshGames()
-          })
+      .catch(response => {
+        this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
+      })
+      .finally(() => {
+        this.bulk = false
+        this.unselectAll()
+        this.refreshGames()
+      })
     },
     paginationReset() {
       return {
@@ -408,7 +368,7 @@ export default {
     getParams() {
       let params = {}
 
-      params['page'] = this.pagination.active_page
+      params['page'] = this.currentPage
 
       if (this.search) {
         params['search'] = this.search
@@ -435,6 +395,9 @@ export default {
       },
       deep: true
 
+    },
+    currentPage() {
+      this.refreshGames()
     }
   },
 
