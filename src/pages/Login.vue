@@ -98,10 +98,16 @@ export default {
   methods: {
     doLogin() {
       this.loading = true;
-
       return authorizationService.doLogin(this.email, this.password).then(response => {
         this.$store.commit("AUTH_SUCCESS", response.data);
+
         this.$store.dispatch("users/loadCurrent").then(() => router.push({name: "LibraryHome"}))
+
+        Promise.all([
+        this.$store.dispatch("library/loadLocations"),
+        this.$store.dispatch("library/loadPlayers")
+            ])
+
       }).catch(response => {
         this.$toast.error(axiosUtils.getErrorDescription(response));
       }).finally(() => (this.loading = false));

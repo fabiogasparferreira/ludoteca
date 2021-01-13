@@ -107,11 +107,13 @@ export default {
           this.selected.push(val.id)
         }
       } else {
-        this.$emit('input', val)
+        this.$emit('input', val.id)
+        this.$bvModal.hide(this.id)
       }
     },
     done(){
       this.$emit('input', this.selected)
+      this.$bvModal.hide(this.id)
     }
   }
 }

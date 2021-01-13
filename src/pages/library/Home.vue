@@ -58,7 +58,7 @@
     <b-row v-if="isAuthenticated()">
       <b-col>
         <b-collapse id="filters-collapse" class="">
-          <div class="bg-light rounded p-4">
+          <div class="bg-primary-soft rounded p-4">
             <b-row>
 
               <!-- Location -->
@@ -75,18 +75,27 @@
 
               <!-- Owner -->
               <b-col lg="6" sm="12">
-                <b-form-group label="Owner">
+                <b-form-group label="Owners">
 
-                  <div>{{ filters['player'] }}
-                    <b-button v-b-modal.players-filter variant="white">Add</b-button>
+                  <div class="d-flex flex-row justify-content-between align-items-center ">
+                    <div>
+                    <span v-for="(owner, index) in owners()" :key="index" class="mr-2 bg-white-soft py-2 px-3 border"
+                          style="border-radius: 10px">{{
+                        owner.name
+                      }}</span>
+                    </div>
+                    <b-button v-b-modal.players-filter variant="info">
+                      <b-icon-pencil-fill font-scale="0.8"/>
+                      Edit
+                    </b-button>
                   </div>
                   <ModalSelect
                       id="players-filter"
+                      v-model="filters['owner']"
                       :items="$store.getters['library/players']"
-                      title="Select a player"
                       item-metadata="email"
                       item-title="name"
-                      :multiple="true"
+                      title="Select a player"
                   />
                 </b-form-group>
               </b-col>
@@ -242,7 +251,7 @@ export default {
       },
       selectedGames: [],
       players: [],
-      filters: this.initFilters(),
+      filters: {owner: '', location: ''},
       filtersOpen: false,
       availability_options: [],
       status_options: [
@@ -262,7 +271,9 @@ export default {
   },
   methods: {
     initFilters() {
-      return {}
+      return {
+        players: []
+      }
     },
     selectAll() {
       this.selected = this.games.map(game => game.id)
@@ -347,23 +358,14 @@ export default {
       Promise.all(promises).then(() => {
         this.$toast.success(`Checked-out ${promises.length} game(s)!`)
       })
-      .catch(response => {
-        this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
-      })
-      .finally(() => {
-        this.bulk = false
-        this.unselectAll()
-        this.refreshGames()
-      })
-    },
-    paginationReset() {
-      return {
-        count: 0,
-        count_per_page: 50,
-        active_page: 1,
-        pages: [],
-        number_pages: 5
-      }
+          .catch(response => {
+            this.$toast.error('Error checking-out game(s): ' + axiosUtils.getErrorDescription(response));
+          })
+          .finally(() => {
+            this.bulk = false
+            this.unselectAll()
+            this.refreshGames()
+          })
     },
     getParams() {
       let params = {}
@@ -375,7 +377,11 @@ export default {
       }
 
       Object.keys(this.filters)
-          .forEach(key => params[key] = this.filters[key])
+          .forEach(key => {
+            if (this.filters[key]) {
+              params[key] = this.filters[key]
+            }
+          })
 
       return params
     },
@@ -383,6 +389,9 @@ export default {
       this.selectedGame = game
       this.$bvModal.show('checkin-modal')
     },
+    owners() {
+      return this.$store.getters["library/players"].filter(player => this.filters['owner'] === player.id)
+    }
   },
 
   watch: {
