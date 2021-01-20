@@ -41,16 +41,7 @@
         </form>
       </b-col>
 
-      <!-- Filters trigger -->
-      <b-col v-if="isAuthenticated()" cols="auto">
-        <b-button v-b-toggle.filters-collapse :pressed.sync="filtersOpen" aria-expanded="false" aria-haspopup="true"
-                  class="btn-white" data-toggle="dropdown"
-                  size="lg">
-          <b-icon-filter></b-icon-filter>
-          Filters
-          <b-badge v-show="Object.keys(filters).length>0" class="ml-1">{{ Object.keys(filters).length }}</b-badge>
-        </b-button>
-      </b-col>
+      <FiltersButton collapse-id="filters-collapse" :filters="filters"/>
 
     </b-row>
 
@@ -156,6 +147,7 @@ import usersMixin from "@/mixins/users.mixin"
 import axiosUtils from "@/mixins/axios.utils"
 import Pagination from "@/components/Pagination"
 import Filters from "@/components/Filters"
+import FiltersButton from "@/components/FiltersButton";
 
 export default {
   name: "Home",
@@ -173,7 +165,6 @@ export default {
       selectedGames: [],
       players: [],
       filters: {},
-      filtersOpen: false,
       availability_options: [],
       status_options: [
         {value: 'available', text: 'Available'},
@@ -185,7 +176,7 @@ export default {
       totalGamesCount: 0
     }
   },
-  components: {Pagination, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard, Filters},
+  components: {FiltersButton, Pagination, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard, Filters},
   mixins: [gamesMixin, usersMixin],
   mounted() {
     this.refreshGames()
