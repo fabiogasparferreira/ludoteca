@@ -54,65 +54,7 @@
 
     </b-row>
 
-    <!-- Filters -->
-    <b-row v-if="isAuthenticated()">
-      <b-col>
-        <b-collapse id="filters-collapse" class="">
-          <div class="bg-light rounded p-4">
-            <b-row>
-
-              <!-- Location -->
-              <b-col lg="6" sm="12">
-                <b-form-group label="Location">
-                  <FormSelect
-                      v-model="filters['location']"
-                      :options="$store.getters['library/locations']"
-                      option-text="name"
-                      option-value="id"
-                  />
-                </b-form-group>
-              </b-col>
-
-              <!-- Owner -->
-              <b-col lg="6" sm="12">
-                <b-form-group label="Owner">
-
-                  <FormSelect
-                      v-model="filters['player']"
-                      :options="$store.getters['library/players']"
-                      option-text="name"
-                      option-value="id"
-                      @search="searchPlayers"
-                  />
-                </b-form-group>
-              </b-col>
-
-              <!-- Status -->
-              <!--              <b-col sm="12" lg="6">-->
-              <!--                <b-form-group label="Status">-->
-              <!--                  <b-form-checkbox-group-->
-              <!--                      v-model="filters['status']"-->
-              <!--                      :options="status_options"-->
-              <!--                      size="md"-->
-              <!--                      buttons-->
-              <!--                      button-variant="white"-->
-              <!--                  ></b-form-checkbox-group>-->
-              <!--                </b-form-group>-->
-              <!--                {{filters}}-->
-              <!--              </b-col>-->
-
-
-              <div class="d-flex w-100 flex-row justify-content-end">
-                <b-link class="text-gray-800" @click="filters = initFilters()">
-                  <b-icon-x></b-icon-x>
-                  CLEAR FILTERS
-                </b-link>
-              </div>
-            </b-row>
-          </div>
-        </b-collapse>
-      </b-col>
-    </b-row>
+    <Filters v-model="filters" collapse-id="filters-collapse"/>
 
     <!-- Content -->
     <div class="mt-4">
@@ -211,9 +153,9 @@ import playerService from "@/services/player.service"
 import CheckinModal from "@/components/CheckinModal"
 import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
-import FormSelect from "@/components/FormSelect";
 import axiosUtils from "@/mixins/axios.utils"
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination"
+import Filters from "@/components/Filters"
 
 export default {
   name: "Home",
@@ -230,7 +172,7 @@ export default {
       },
       selectedGames: [],
       players: [],
-      filters: this.initFilters(),
+      filters: {},
       filtersOpen: false,
       availability_options: [],
       status_options: [
@@ -243,15 +185,12 @@ export default {
       totalGamesCount: 0
     }
   },
-  components: {Pagination, FormSelect, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard},
+  components: {Pagination, CheckinModal, ModalPlayerSelect, LibraryGameCard, Header, ItemCard, Filters},
   mixins: [gamesMixin, usersMixin],
   mounted() {
     this.refreshGames()
   },
   methods: {
-    initFilters() {
-      return {}
-    },
     selectAll() {
       this.selected = this.games.map(game => game.id)
     },
