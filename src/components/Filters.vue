@@ -22,7 +22,6 @@
             <!-- Owner -->
             <b-col lg="6" sm="12">
               <b-form-group label="Owner">
-
                 <FormSelect
                     v-model="filters['player']"
                     :options="$store.getters['library/players']"
@@ -32,21 +31,6 @@
                 />
               </b-form-group>
             </b-col>
-
-            <!-- Status -->
-            <!--              <b-col sm="12" lg="6">-->
-            <!--                <b-form-group label="Status">-->
-            <!--                  <b-form-checkbox-group-->
-            <!--                      v-model="filters['status']"-->
-            <!--                      :options="status_options"-->
-            <!--                      size="md"-->
-            <!--                      buttons-->
-            <!--                      button-variant="white"-->
-            <!--                  ></b-form-checkbox-group>-->
-            <!--                </b-form-group>-->
-            <!--                {{filters}}-->
-            <!--              </b-col>-->
-
 
             <div class="d-flex w-100 flex-row justify-content-end">
               <b-link class="text-gray-800" @click="filters = initFilters()">
