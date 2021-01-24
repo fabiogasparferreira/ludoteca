@@ -140,7 +140,6 @@ import libraryService from "@/services/library.service"
 import Header from "@/components/Header"
 import LibraryGameCard from "@/components/LibraryGameCard"
 import ModalPlayerSelect from "@/components/ModalPlayerSelect"
-import playerService from "@/services/player.service"
 import CheckinModal from "@/components/CheckinModal"
 import ItemCard from "@/components/ItemCard"
 import usersMixin from "@/mixins/users.mixin"
@@ -197,11 +196,6 @@ export default {
         this.games = response.results
         this.totalGamesCount = response.count
         this.loading = false
-      })
-    },
-    searchPlayers(query) {
-      playerService.searchPlayers(query).then(response => {
-        this.players = response
       })
     },
     checkoutGames() {
