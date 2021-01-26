@@ -163,7 +163,7 @@ export default {
       },
       selectedGames: [],
       players: [],
-      filters: {},
+      filters: new Filters.Model([Filters.Model.Type.LOCATION, Filters.Model.Type.PLAYER]),
       availability_options: [],
       status_options: [
         {value: 'available', text: 'Available'},

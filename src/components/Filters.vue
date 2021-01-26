@@ -8,10 +8,10 @@
           <b-row>
 
             <!-- Location -->
-            <b-col lg="6" sm="12">
+            <b-col lg="6" sm="12" v-if="showFilterType('location')">
               <b-form-group label="Location">
                 <FormSelect
-                    v-model="filters['location']"
+                    v-model="filtersModel.filtersSelected['location']"
                     :options="$store.getters['library/locations']"
                     option-text="name"
                     option-value="id"
@@ -20,10 +20,10 @@
             </b-col>
 
             <!-- Owner -->
-            <b-col lg="6" sm="12">
+            <b-col lg="6" sm="12" v-if="showFilterType('player')">
               <b-form-group label="Owner">
                 <FormSelect
-                    v-model="filters['player']"
+                    v-model="filtersModel.filtersSelected['player']"
                     :options="$store.getters['library/players']"
                     option-text="name"
                     option-value="id"
@@ -33,7 +33,7 @@
             </b-col>
 
             <div class="d-flex w-100 flex-row justify-content-end">
-              <b-link class="text-gray-800" @click="filters = initFilters()">
+              <b-link class="text-gray-800" @click="clearFilters">
                 <b-icon-x></b-icon-x>
                 CLEAR FILTERS
               </b-link>
@@ -57,7 +57,7 @@ export default {
   mixins: [usersMixin],
   props: {
     value: {
-      type: Object,
+      type: FiltersModel,
       required: true
     },
     collapseId: {
@@ -71,7 +71,7 @@ export default {
     }
   },
   computed: {
-    filters: {
+    filtersModel: {
       get() {
         return this.value
       },
@@ -81,14 +81,33 @@ export default {
     }
   },
   methods: {
-    initFilters() {
-      return {}
+    showFilterType(type) {
+      return this.filtersModel.filterTypes.has(type)
+    },
+    clearFilters() {
+      this.filtersModel.filtersSelected = {}
     },
     searchPlayers(query) {
       playerService.searchPlayers(query).then(response => {
         this.players = response
       })
     }
-  }
+  },
+  Model: FiltersModel
 }
+
+function FiltersModel(filterTypes = []) {
+  this.filtersSelected = {}
+  this.filterTypes = new Set(filterTypes)
+}
+
+FiltersModel.prototype.count = function() {
+  return Object.keys(this.filtersSelected).length
+}
+
+FiltersModel.Type = {
+  LOCATION: "location",
+  PLAYER: "player"
+}
+
 </script>
