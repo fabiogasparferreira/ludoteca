@@ -32,5 +32,4 @@ class LibraryGameFilter(filters.FilterSet):
             queryset = queryset.filter(date_checkin__isnull=False).annotate(
                 open_withdraws=Count('withdraw', filter=Q(withdraw__date_returned__isnull=True))).filter(
                 open_withdraws__gt=0)
-        print(str(list(queryset.all())))
         return queryset
