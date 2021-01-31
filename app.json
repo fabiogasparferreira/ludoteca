@@ -45,6 +45,6 @@
     }
   },
   "scripts": {
-    "postdeploy": "python manage.py ludoteca-dev backend/ludoteca_leiriacon.csv"
+    "postdeploy": "python manage.py ludoteca_dev backend/ludoteca_leiriacon.csv"
   }
 }
