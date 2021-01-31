@@ -144,6 +144,7 @@ class Command(BaseCommand):
         for _, row in table.iterrows():
             bgggame = BggGame()
             bgggame.bggid = row['bggid']
+            bgggame.name = row['name']
             bgggame.rank = float(row['rank']) if not math.isnan(float(row['rank'])) else None
             bgggame.min_players = row['min_players']
             bgggame.max_players = row['max_players']
