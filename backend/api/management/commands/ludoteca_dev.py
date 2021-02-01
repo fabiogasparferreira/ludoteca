@@ -124,7 +124,7 @@ class Command(BaseCommand):
         # TODO: Move this to a config file
         reader = pd.read_csv('https://my.api.mockaroo.com/players.json?key=5dec1ef0', header=0, delimiter=',')
 
-        User.objects.create_superuser(username='admin', email='admin@mail.com', password='admin')
+        User.objects.create_superuser(username='admin', email='admin@example.com', password='admin')
 
         for _, row in reader.iterrows():
             user = User()
@@ -139,7 +139,6 @@ class Command(BaseCommand):
         print('3. Create library games')
         # load library from file
         skipped = []
-        #self.stdout.write('backend/bgggames_table.csv')
         table = pd.read_csv('backend/bgggames_table.csv', header=0, delimiter=';')
         for _, row in table.iterrows():
             bgggame = BggGame()
@@ -154,7 +153,6 @@ class Command(BaseCommand):
             bgggame.thumbnail = row['thumbnail']
             bgggame.save()
 
-        #self.stdout.write(options['file'])
         table = pd.read_csv(options['file'], header=0, delimiter=';')
         for _, row in table.iterrows():
             owners = row['owners'].split(",")
