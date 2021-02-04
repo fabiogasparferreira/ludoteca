@@ -1,95 +1,95 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import StoreHome from "@/pages/store/Home";
-import LibraryHome from "@/pages/library/Home";
-import Login from "./pages/Login";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import StoreHome from '@/pages/store/Home'
+import LibraryHome from '@/pages/library/Home'
+import Login from './pages/Login'
 
-import HomeTemplate from "@/pages/templates/HomeTemplate";
-import WithdrawGame from "@/pages/library/WithdrawGame";
-import AddGame from "@/pages/library/AddGame";
-import LibraryDashboard from "@/pages/library/Dashboard";
+import HomeTemplate from '@/pages/templates/HomeTemplate'
+import WithdrawGame from '@/pages/library/WithdrawGame'
+import AddGame from '@/pages/library/AddGame'
+import LibraryDashboard from '@/pages/library/Dashboard'
 
-import authorizationService from "@/services/authorization.service";
-import PageNotFound from "@/pages/PageNotFound";
+import authorizationService from '@/services/authorization.service'
+import PageNotFound from '@/pages/PageNotFound'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 //Guardians
 function guardAuthenticated(to, from, next) {
   if (authorizationService.isAuthenticated()) {
-    next();
+    next()
   } else {
-    next({ name: "Login" });
+    next({ name: 'Login' })
   }
 }
 
 const routes = [
   {
-    path: "",
+    path: '',
     component: HomeTemplate,
     children: [
       {
-        path: "/",
-        name: "Home",
+        path: '/',
+        name: 'Home',
         component: LibraryHome,
-        props: { title: "Library", pretitle: "leiriacon 2022" }
+        props: { title: 'Library', pretitle: 'leiriacon 2022' },
       },
       {
-        path: "/library/",
-        name: "LibraryHome",
+        path: '/library/',
+        name: 'LibraryHome',
         component: LibraryHome,
-        props: { title: "Library", pretitle: "leiriacon 2022" }
+        props: { title: 'Library', pretitle: 'leiriacon 2022' },
       },
       {
-        path: "/library/dashboard",
-        name: "LibraryDashboard",
+        path: '/library/dashboard',
+        name: 'LibraryDashboard',
         beforeEnter: guardAuthenticated,
-        component: LibraryDashboard
+        component: LibraryDashboard,
       },
       {
-        path: "/store/",
-        name: "StoreHome",
-        component: StoreHome
-      }
-    ]
+        path: '/store/',
+        name: 'StoreHome',
+        component: StoreHome,
+      },
+    ],
   },
 
   {
-    path: "/library/new",
-    name: "AddLibraryGame",
+    path: '/library/new',
+    name: 'AddLibraryGame',
     beforeEnter: guardAuthenticated,
-    component: AddGame
+    component: AddGame,
   },
   {
-    path: "/library/:id/withdraw",
-    name: "WithdrawGame",
-    props: { title: "Withdraw game", pretitle: "Library" },
+    path: '/library/:id/withdraw',
+    name: 'WithdrawGame',
+    props: { title: 'Withdraw game', pretitle: 'Library' },
     beforeEnter: guardAuthenticated,
-    component: WithdrawGame
+    component: WithdrawGame,
   },
   {
-    path: "/login",
-    name: "Login",
+    path: '/login',
+    name: 'Login',
     component: Login,
     beforeEnter: (to, from, next) => {
       if (authorizationService.isAuthenticated()) {
-        next({ name: "NotFound" });
+        next({ name: 'NotFound' })
       } else {
-        next();
+        next()
       }
-    }
+    },
   },
   {
-    name: "NotFound",
-    path: "*",
-    component: PageNotFound
-  }
-];
+    name: 'NotFound',
+    path: '*',
+    component: PageNotFound,
+  },
+]
 
 const router = new VueRouter({
-  mode: "history",
-  base: "/",
-  routes
-});
+  mode: 'history',
+  base: '/',
+  routes,
+})
 
-export default router;
+export default router
