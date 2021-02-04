@@ -1,5 +1,10 @@
 <template>
-  <ItemCard :bulk="bulk" :loading="loading" :title="game.name" :variant="bgVariant">
+  <ItemCard
+    :bulk="bulk"
+    :loading="loading"
+    :title="game.name"
+    :variant="bgVariant"
+  >
     <template v-slot:image>
       <slot name="image">
         <b-avatar :src="game.thumbnail" rounded size="lg"></b-avatar>
@@ -15,9 +20,16 @@
     <template v-slot:metadata>
       <slot name="metadata">
         <b-icon-person-fill class="text-muted mr-2"></b-icon-person-fill>
-        <span class=" text-muted">{{ num_players(game.min_players, game.max_players) }}</span>
-        <b-icon-clock-fill class="ml-4 mr-2 text-muted" font-scale="0.8"></b-icon-clock-fill>
-        <span class=" text-muted">{{ playtime(game.min_playtime, game.max_playtime) }} </span>
+        <span class=" text-muted">{{
+          num_players(game.min_players, game.max_players)
+        }}</span>
+        <b-icon-clock-fill
+          class="ml-4 mr-2 text-muted"
+          font-scale="0.8"
+        ></b-icon-clock-fill>
+        <span class=" text-muted"
+          >{{ playtime(game.min_playtime, game.max_playtime) }}
+        </span>
       </slot>
     </template>
     <template v-slot:top-right>
@@ -33,11 +45,11 @@
 </template>
 
 <script>
-import ItemCard from "@/components/ItemCard"
-import gamesMixin from "@/mixins/games.mixin"
+import ItemCard from '@/components/ItemCard'
+import gamesMixin from '@/mixins/games.mixin'
 
 export default {
-  name: "GameCard",
+  name: 'GameCard',
   props: {
     game: {
       required: true,
@@ -45,29 +57,27 @@ export default {
     },
     loading: {
       default: false,
-      type: Boolean
+      type: Boolean,
     },
     bulk: {
       default: false,
-      type: Boolean
+      type: Boolean,
     },
     bgVariant: {
       type: String,
-    }
+    },
   },
 
   mixins: [gamesMixin],
   components: {
-    ItemCard
+    ItemCard,
   },
   data() {
     return {
-      selected: []
+      selected: [],
     }
-  }
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

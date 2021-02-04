@@ -3,18 +3,18 @@ export default {
   getRefreshToken,
   setAccessToken,
   setRefreshToken,
-  clearTokens
-};
+  clearTokens,
+}
 
-const ACCESS_TOKEN = "access_token";
-const REFRESH_TOKEN = "refresh_token";
+const ACCESS_TOKEN = 'access_token'
+const REFRESH_TOKEN = 'refresh_token'
 
 /**
  * Returns access token
  * @returns {string}
  */
 function getAccessToken() {
-  return localStorage.getItem(ACCESS_TOKEN);
+  return localStorage.getItem(ACCESS_TOKEN)
 }
 
 /**
@@ -22,7 +22,7 @@ function getAccessToken() {
  * @returns {string}
  */
 function getRefreshToken() {
-  return localStorage.getItem(REFRESH_TOKEN);
+  return localStorage.getItem(REFRESH_TOKEN)
 }
 
 /**
@@ -30,7 +30,7 @@ function getRefreshToken() {
  * @param token
  */
 function setAccessToken(token) {
-  localStorage.setItem(ACCESS_TOKEN, token);
+  localStorage.setItem(ACCESS_TOKEN, token)
 }
 
 /**
@@ -38,13 +38,13 @@ function setAccessToken(token) {
  * @param refreshToken
  */
 function setRefreshToken(refreshToken) {
-  localStorage.setItem(REFRESH_TOKEN, refreshToken);
+  localStorage.setItem(REFRESH_TOKEN, refreshToken)
 }
 
 /**
  * Clear access and refresh tokens
  */
 function clearTokens() {
-  localStorage.removeItem(ACCESS_TOKEN);
-  localStorage.removeItem(REFRESH_TOKEN);
+  localStorage.removeItem(ACCESS_TOKEN)
+  localStorage.removeItem(REFRESH_TOKEN)
 }

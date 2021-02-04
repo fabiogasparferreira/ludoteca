@@ -1,47 +1,40 @@
 <template>
   <div class="min-vh-100 d-flex">
-  <div class="container align-self-center">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-5 col-xl-4 my-5">
+    <div class="container align-self-center">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-5 col-xl-4 my-5">
+          <div class="text-center">
+            <!-- Preheading -->
+            <h6 class="text-uppercase text-muted mb-4">
+              404 error
+            </h6>
 
-        <div class="text-center">
+            <!-- Heading -->
+            <h1 class="display-4 mb-3">
+              There’s no page here 😭
+            </h1>
 
-          <!-- Preheading -->
-          <h6 class="text-uppercase text-muted mb-4">
-            404 error
-          </h6>
+            <!-- Subheading -->
+            <p class="text-muted mb-4">
+              Looks like you ended up here by accident?
+            </p>
 
-          <!-- Heading -->
-          <h1 class="display-4 mb-3">
-            There’s no page here 😭
-          </h1>
-
-          <!-- Subheading -->
-          <p class="text-muted mb-4">
-            Looks like you ended up here by accident?
-          </p>
-
-          <!-- Button -->
-          <b-button :to="{name: 'LibraryHome'}" size="lg" variant="primary">
-            Return to your dashboard
-          </b-button>
-
+            <!-- Button -->
+            <b-button :to="{ name: 'LibraryHome' }" size="lg" variant="primary">
+              Return to your dashboard
+            </b-button>
+          </div>
         </div>
-
       </div>
-    </div> <!-- / .row -->
-
-
-  </div>
+      <!-- / .row -->
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "PageNotFound"
+  name: 'PageNotFound',
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

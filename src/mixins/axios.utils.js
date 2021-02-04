@@ -1,11 +1,11 @@
 export default {
-  getErrorDescription
-};
+  getErrorDescription,
+}
 
 function getErrorDescription(response) {
-  if (! response || ! response.response || response.response.status >= 500) {
-    return "Unexpected error, please contact technical support";
+  if (!response || !response.response || response.response.status >= 500) {
+    return 'Unexpected error, please contact technical support'
   } else if (response.response.status >= 400) {
-    return response.response.data.detail;
+    return response.response.data.detail
   }
 }

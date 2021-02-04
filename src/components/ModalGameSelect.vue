@@ -1,32 +1,32 @@
 <template>
   <!-- Modal -->
   <ModalSelect
-      :id="id"
-      :hide-footer="true"
-      :items="games"
-      :title="title"
-      item-metadata="year"
-      item-title="name"
-      @search="search"
-      @selected="$emit('game-selected', $event)">
+    :id="id"
+    :hide-footer="true"
+    :items="games"
+    :title="title"
+    item-metadata="year"
+    item-title="name"
+    @search="search"
+    @selected="$emit('game-selected', $event)"
+  >
   </ModalSelect>
 </template>
 
 <script>
 import bggService from '@/services/bgg.service'
-import ModalSelect from "@/components/ModalSelect";
+import ModalSelect from '@/components/ModalSelect'
 
 export default {
-  name: "ModalGameSelect",
+  name: 'ModalGameSelect',
   props: ['id', 'title'],
   components: {
-    ModalSelect
-
+    ModalSelect,
   },
-  data: function () {
+  data: function() {
     return {
       games: [],
-      loading: false
+      loading: false,
     }
   },
   methods: {
@@ -37,11 +37,8 @@ export default {
         this.games = response
       })
     },
-
   },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

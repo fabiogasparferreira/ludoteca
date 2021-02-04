@@ -1,15 +1,15 @@
-import localStorageService from "@/services/localStorage.service";
-import { unauthApi } from "@/services/api";
-import router from "@/router";
+import localStorageService from '@/services/localStorage.service'
+import { unauthApi } from '@/services/api'
+import router from '@/router'
 
-const URL = "/api/token/";
+const URL = '/api/token/'
 
 export default {
   refreshToken,
   doLogin,
   logout,
-  isAuthenticated
-};
+  isAuthenticated,
+}
 
 /**
  * Do login with the provided username and password
@@ -20,12 +20,12 @@ export default {
 function doLogin(email, password) {
   return unauthApi.post(URL, {
     email: email,
-    password: password
-  });
+    password: password,
+  })
 }
 
 function logout() {
-  localStorageService.clearTokens();
+  localStorageService.clearTokens()
 }
 
 /**
@@ -36,20 +36,20 @@ function refreshToken() {
   // call API to get a new token
   return (
     unauthApi
-      .post(URL + "refresh/", {
-        refresh: localStorageService.getRefreshToken()
+      .post(URL + 'refresh/', {
+        refresh: localStorageService.getRefreshToken(),
       })
       .then(response => {
         // save new token to LocalStorage
-        localStorageService.setAccessToken(response.data.access);
-        return Promise.resolve(response.data.access);
+        localStorageService.setAccessToken(response.data.access)
+        return Promise.resolve(response.data.access)
       })
       // In case refresh token call returns an error, clear tokens and redirect to login
       .catch(() => {
         //localStorageService.clearTokens();
-        router.push({ name: "Login" });
+        router.push({ name: 'Login' })
       })
-  );
+  )
 }
 
 /**
@@ -63,5 +63,5 @@ function isAuthenticated() {
   return (
     !!localStorageService.getAccessToken() &&
     !!localStorageService.getRefreshToken()
-  );
+  )
 }
