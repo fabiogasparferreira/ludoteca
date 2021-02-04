@@ -1,13 +1,13 @@
 import localStorageService from "@/services/localStorage.service";
 import { unauthApi } from "@/services/api";
-import router from "@/router"
+import router from "@/router";
 
-const URL = '/api/token/'
+const URL = "/api/token/";
 
 export default {
   refreshToken,
   doLogin,
-    logout,
+  logout,
   isAuthenticated
 };
 
@@ -24,8 +24,8 @@ function doLogin(email, password) {
   });
 }
 
-function logout(){
-    localStorageService.clearTokens()
+function logout() {
+  localStorageService.clearTokens();
 }
 
 /**
@@ -36,7 +36,7 @@ function refreshToken() {
   // call API to get a new token
   return (
     unauthApi
-      .post(URL+"refresh/", {
+      .post(URL + "refresh/", {
         refresh: localStorageService.getRefreshToken()
       })
       .then(response => {
@@ -58,7 +58,7 @@ function refreshToken() {
  * @returns {boolean|boolean}
  */
 function isAuthenticated() {
-    //TODO: Call api to check tokens
+  //TODO: Call api to check tokens
 
   return (
     !!localStorageService.getAccessToken() &&

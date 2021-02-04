@@ -9,15 +9,18 @@
 
       <b-collapse id="nav-collapse" class="w-100" is-nav>
         <b-navbar-nav>
-          <b-nav-item active-class="active" :to="{ name: 'LibraryHome' }">Ludoteca</b-nav-item>
-          <b-nav-item active-class="active" :to="{ name: 'StoreHome' }">Loja</b-nav-item>
+          <b-nav-item :to="{ name: 'LibraryHome' }" active-class="active">Ludoteca</b-nav-item>
+          <b-nav-item :to="{ name: 'StoreHome' }" active-class="active">Loja</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown toggle-class="pl-0" right :text="$store.getters['users/current'].name">
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Logout</b-dropdown-item>
+
+          <b-button v-if="!isAuthenticated()" :to="{name: 'Login'}" variant="link">Sign in</b-button>
+          <b-nav-item-dropdown v-if="isAuthenticated()" :text="$store.getters['users/current'].name" right
+                               toggle-class="pl-0">
+            <b-dropdown-item>Profile</b-dropdown-item>
+            <b-dropdown-item-button @click="logout">Logout</b-dropdown-item-button>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -36,6 +39,10 @@ export default {
   methods: {
     logout() {
       authorizationService.logout()
+      location.reload()
+    },
+    isAuthenticated() {
+      return authorizationService.isAuthenticated()
     }
   }
 }
