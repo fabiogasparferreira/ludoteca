@@ -103,6 +103,8 @@ export default {
           this.$store
             .dispatch('users/loadCurrent')
             .then(() => router.push({ name: 'LibraryHome' }))
+          this.$store.dispatch("library/loadPlayers")
+          this.$store.dispatch("library/loadLocations")
         })
         .catch(response => {
           this.$toast.error(axiosUtils.getErrorDescription(response))
