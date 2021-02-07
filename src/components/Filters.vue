@@ -8,25 +8,14 @@
             <!-- Location -->
             <b-col lg="6" sm="12" v-if="showFilterType('location')">
               <b-form-group label="Location">
-                <FormSelect
-                  v-model="filtersModel.filtersSelected['location']"
-                  :options="$store.getters['library/locations']"
-                  option-text="name"
-                  option-value="id"
-                />
+                <FilterSelect v-model="filtersModel.filtersSelected['location']" :options="$store.getters['library/locations']"/>
               </b-form-group>
             </b-col>
 
             <!-- Owner -->
             <b-col lg="6" sm="12" v-if="showFilterType('player')">
               <b-form-group label="Owner">
-                <FormSelect
-                  v-model="filtersModel.filtersSelected['player']"
-                  :options="$store.getters['library/players']"
-                  option-text="name"
-                  option-value="id"
-                  @search="searchPlayers"
-                />
+                <FilterSelect v-model="filtersModel.filtersSelected['player']" :options="$store.getters['library/players']" @search="searchPlayers"/>
               </b-form-group>
             </b-col>
 
@@ -46,11 +35,11 @@
 <script>
 import usersMixin from '@/mixins/users.mixin'
 import playerService from '@/services/player.service'
-import FormSelect from '@/components/FormSelect'
+import FilterSelect from "@/components/FilterSelect"
 
 export default {
   name: 'Filters',
-  components: { FormSelect },
+  components: { FilterSelect },
   mixins: [usersMixin],
   props: {
     value: {
