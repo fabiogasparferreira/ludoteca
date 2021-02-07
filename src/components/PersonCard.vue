@@ -2,7 +2,10 @@
   <ItemCard :title="person.name">
     <template v-slot:image>
       <div class="avatar">
-        <span class="avatar-title rounded-circle" v-text="initials(person.name)"></span>
+        <span
+          class="avatar-title rounded-circle"
+          v-text="initials(person.name)"
+        ></span>
       </div>
     </template>
     <template v-slot:metadata>
@@ -15,17 +18,15 @@
 </template>
 
 <script>
-import ItemCard from "@/components/ItemCard";
-import personMixin from "@/mixins/person.mixin";
+import ItemCard from '@/components/ItemCard'
+import personMixin from '@/mixins/person.mixin'
 
 export default {
-  name: "PersonCard",
-  components: {ItemCard},
+  name: 'PersonCard',
+  components: { ItemCard },
   mixins: [personMixin],
-  props: ['person']
+  props: ['person'],
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

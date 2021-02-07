@@ -2,28 +2,25 @@
   <div>
     <TopNav></TopNav>
     <div class="container">
-      <router-view/>
+      <router-view />
     </div>
   </div>
-
 </template>
 
 <script>
-import TopNav from "@/components/TopNav";
+import TopNav from '@/components/TopNav'
 
 export default {
-  name: "HomeTemplate",
+  name: 'HomeTemplate',
   props: {
     title: {
-      default: 'Empty title'
-    }
+      default: 'Empty title',
+    },
   },
   components: {
-    TopNav
-  }
+    TopNav,
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

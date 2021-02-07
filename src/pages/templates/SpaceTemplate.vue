@@ -1,13 +1,11 @@
 <template>
-        <router-view/>
+  <router-view />
 </template>
 
 <script>
-    export default {
-        name: "SpaceTemplate"
-    }
+export default {
+  name: 'SpaceTemplate',
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

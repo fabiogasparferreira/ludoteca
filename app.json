@@ -6,8 +6,11 @@
     "django",
     "vue",
     "vuejs",
-    "template",
-    "django rest framework"
+    "django rest framework",
+    "bootstrap",
+    "dashkit",
+    "board game",
+    "board game geek"
   ],
   "env": {
     "DJANGO_SETTINGS_MODULE": {
@@ -31,7 +34,17 @@
   ],
   "environments": {
     "review": {
-      "addons": ["heroku-postgresql:hobby-dev"]
+      "addons": [
+        "heroku-postgresql:hobby-dev"
+      ]
+    },
+    "test": {
+      "addons": [
+        "heroku-postgresql:hobby-dev"
+      ]
     }
-}
+  },
+  "scripts": {
+    "postdeploy": "python manage.py ludoteca_dev backend/ludoteca_leiriacon.csv"
+  }
 }

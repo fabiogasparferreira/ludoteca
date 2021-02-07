@@ -1,5 +1,4 @@
 <template>
-
   <div class="header">
     <div class="header-body">
       <div class="row align-items-center">
@@ -17,19 +16,15 @@
           <slot name="content-right"></slot>
         </div>
       </div>
-
     </div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: "Header",
-  props: ['title', 'pretitle']
+  name: 'Header',
+  props: ['title', 'pretitle'],
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

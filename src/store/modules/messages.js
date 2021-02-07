@@ -1,36 +1,34 @@
 import messageService from '../../services/messageService'
 
 const state = {
-  messages: []
+  messages: [],
 }
 
 const getters = {
   messages: state => {
     return state.messages
-  }
+  },
 }
 
 const actions = {
-  getMessages ({ commit }) {
-    messageService.fetchMessages()
-    .then(messages => {
+  getMessages({ commit }) {
+    messageService.fetchMessages().then(messages => {
       commit('setMessages', messages)
     })
   },
   addMessage({ commit }, message) {
-    messageService.postMessage(message)
-    .then(() => {
+    messageService.postMessage(message).then(() => {
       commit('addMessage', message)
     })
   },
-  deleteMessage( { commit }, msgId) {
+  deleteMessage({ commit }, msgId) {
     messageService.deleteMessage(msgId)
     commit('deleteMessage', msgId)
-  }
+  },
 }
 
 const mutations = {
-  setMessages (state, messages) {
+  setMessages(state, messages) {
     state.messages = messages
   },
   addMessage(state, message) {
@@ -38,7 +36,7 @@ const mutations = {
   },
   deleteMessage(state, msgId) {
     state.messages = state.messages.filter(obj => obj.pk !== msgId)
-  }
+  },
 }
 
 export default {
@@ -46,5 +44,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

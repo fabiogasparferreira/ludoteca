@@ -1,3 +1,4 @@
+import math
 import random
 import time
 
@@ -6,6 +7,7 @@ import pandas as pd
 from boardgamegeek import BGGClient
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from django.utils import timezone
 
 from backend.api.models import BggGame, LibraryGame, Location, Withdraw
@@ -92,6 +94,7 @@ class Command(BaseCommand):
         else:
             print('game not found (' + str(bggid) + ')')
 
+    @transaction.atomic
     def handle(self, *args, **options):
         print('------------------------------------')
         print('-- ludoteca dummy data generation --')
@@ -120,6 +123,9 @@ class Command(BaseCommand):
         print('2. Create users')
         # TODO: Move this to a config file
         reader = pd.read_csv('https://my.api.mockaroo.com/players.json?key=5dec1ef0', header=0, delimiter=',')
+
+        User.objects.create_superuser(username='admin', email='admin@example.com', password='admin')
+
         for _, row in reader.iterrows():
             user = User()
             user.first_name = row['first_name']
@@ -133,7 +139,20 @@ class Command(BaseCommand):
         print('3. Create library games')
         # load library from file
         skipped = []
-        self.stdout.write(options['file'])
+        table = pd.read_csv('backend/bgggames_table.csv', header=0, delimiter=';')
+        for _, row in table.iterrows():
+            bgggame = BggGame()
+            bgggame.bggid = row['bggid']
+            bgggame.name = row['name']
+            bgggame.rank = float(row['rank']) if not math.isnan(float(row['rank'])) else None
+            bgggame.min_players = row['min_players']
+            bgggame.max_players = row['max_players']
+            bgggame.min_playtime = row['min_playtime']
+            bgggame.max_playtime = row['max_playtime']
+            bgggame.image = row['image']
+            bgggame.thumbnail = row['thumbnail']
+            bgggame.save()
+
         table = pd.read_csv(options['file'], header=0, delimiter=';')
         for _, row in table.iterrows():
             owners = row['owners'].split(",")

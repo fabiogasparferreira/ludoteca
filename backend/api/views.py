@@ -24,6 +24,8 @@ index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 class SupplierViewSet(viewsets.ModelViewSet):

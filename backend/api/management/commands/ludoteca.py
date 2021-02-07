@@ -8,6 +8,7 @@ import requests
 from boardgamegeek import BGGClient
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 from backend.api.models import BggGame, LibraryGame, Location
 from backend.api.utils import BggGameUtils
@@ -99,6 +100,7 @@ class Command(BaseCommand):
         else:
             print('game not found (' + str(bggid) + ')')
 
+    @transaction.atomic
     def handle(self, *args, **options):
         print('------------------------------------')
         print('-- ludoteca dummy data generation --')
@@ -123,21 +125,7 @@ class Command(BaseCommand):
 
         print('Done')
 
-        # create players
-        print('2. Create users')
-        # TODO: Move this to a config file
-        reader = pd.read_csv('https://my.api.mockaroo.com/players.json?key=5dec1ef0', header=0, delimiter=',')
-        for _, row in reader.iterrows():
-            user = User()
-            user.first_name = row['first_name']
-            user.last_name = row['last_name']
-            user.email = row['email']
-            user.username = row['username']
-            user.save()
-
-        print('Done')
-
-        print('3. Create library games')
+        print('2. Create library games')
         # load library from file
         skipped = []
         self.stdout.write(options['file'])
