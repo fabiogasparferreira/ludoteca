@@ -5,19 +5,8 @@
       <b-collapse :id="collapseId" class="">
         <div class="bg-light rounded p-4">
           <b-row>
-            <!-- Location -->
-            <b-col lg="6" sm="12" v-if="showFilterType('location')">
-              <b-form-group label="Location">
-                <FilterSelect v-model="filtersModel.filtersSelected['location']" :options="$store.getters['library/locations']"/>
-              </b-form-group>
-            </b-col>
 
-            <!-- Owner -->
-            <b-col lg="6" sm="12" v-if="showFilterType('player')">
-              <b-form-group label="Owner">
-                <FilterSelect v-model="filtersModel.filtersSelected['player']" :options="$store.getters['library/players']" @search="searchPlayers"/>
-              </b-form-group>
-            </b-col>
+            <slot></slot>
 
             <div class="d-flex w-100 flex-row justify-content-end">
               <b-link class="text-gray-800" @click="clearFilters">
@@ -34,12 +23,9 @@
 
 <script>
 import usersMixin from '@/mixins/users.mixin'
-import playerService from '@/services/player.service'
-import FilterSelect from "@/components/FilterSelect"
 
 export default {
   name: 'Filters',
-  components: { FilterSelect },
   mixins: [usersMixin],
   props: {
     value: {
@@ -50,11 +36,6 @@ export default {
       type: String,
       default: 'filters-collapse',
     },
-  },
-  data() {
-    return {
-      players: [],
-    }
   },
   computed: {
     filtersModel: {
@@ -67,33 +48,19 @@ export default {
     },
   },
   methods: {
-    showFilterType(type) {
-      return this.filtersModel.filterTypes.has(type)
-    },
     clearFilters() {
       this.filtersModel.filtersSelected = {}
-    },
-    searchPlayers(query) {
-      playerService.searchPlayers(query).then(response => {
-        this.players = response
-      })
     },
   },
   Model: FiltersModel
 }
 
-function FiltersModel(filterTypes = []) {
+function FiltersModel() {
   this.filtersSelected = {}
-  this.filterTypes = new Set(filterTypes)
 }
 
 FiltersModel.prototype.count = function() {
   return Object.keys(this.filtersSelected).length
-}
-
-FiltersModel.Type = {
-  LOCATION: "location",
-  PLAYER: "player"
 }
 
 </script>
