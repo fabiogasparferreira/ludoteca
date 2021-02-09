@@ -1,6 +1,5 @@
 import localStorageService from '@/services/localStorage.service'
 import { unauthApi } from '@/services/api'
-import router from '@/router'
 
 const URL = '/api/token/'
 
@@ -46,8 +45,8 @@ function refreshToken() {
       })
       // In case refresh token call returns an error, clear tokens and redirect to login
       .catch(() => {
-        //localStorageService.clearTokens();
-        router.push({ name: 'Login' })
+        localStorageService.clearTokens()
+        //router.push({ name: 'Login' })
       })
   )
 }

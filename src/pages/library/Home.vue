@@ -45,7 +45,7 @@
         </form>
       </b-col>
 
-      <FiltersButton collapse-id="filters-collapse" :filters="filters" />
+      <FiltersButton :filters="filters" collapse-id="filters-collapse" />
     </b-row>
 
     <Filters v-model="filters" collapse-id="filters-collapse">
@@ -160,8 +160,8 @@
               </div>
             </template>
             <b-dropdown-item-button @click="checkoutGames"
-              >Check-out</b-dropdown-item-button
-            >
+              >Check-out
+            </b-dropdown-item-button>
           </b-dropdown>
         </div>
       </div>
@@ -188,6 +188,7 @@ import libraryService from '@/services/library.service'
 import Header from '@/components/Header'
 import LibraryGameCard from '@/components/LibraryGameCard'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
+import playerService from '@/services/player.service'
 import CheckinModal from '@/components/CheckinModal'
 import ItemCard from '@/components/ItemCard'
 import usersMixin from '@/mixins/users.mixin'
@@ -196,7 +197,6 @@ import Pagination from '@/components/Pagination'
 import Filters from '@/components/Filters'
 import FiltersButton from '@/components/FiltersButton'
 import FilterSelect from '@/components/FilterSelect'
-import playerService from "@/services/player.service"
 
 export default {
   name: 'Home',
@@ -242,7 +242,7 @@ export default {
   },
   methods: {
     selectAll() {
-      this.selected = this.games.map(game => game.id)
+      this.selected = this.games.map((game) => game.id)
     },
     unselectAll() {
       this.selected = []
@@ -252,15 +252,20 @@ export default {
 
       let params = this.getParams()
 
-      libraryService.filterGames(params).then(response => {
+      libraryService.filterGames(params).then((response) => {
         this.games = response.results
         this.totalGamesCount = response.count
         this.loading = false
       })
     },
+    searchPlayers(query) {
+      playerService.searchPlayers(query).then((response) => {
+        this.players = response
+      })
+    },
     checkoutGames() {
       const isOwnerLeiriaCon = this.games.filter(
-        game =>
+        (game) =>
           game.owner.name == 'leiriacon' && this.selected.includes(game.id),
       ).length
 
@@ -275,12 +280,12 @@ export default {
               cancelTitle: 'No',
             },
           )
-          .then(confirmed => {
+          .then((confirmed) => {
             if (confirmed) {
               this.deleteCheckedOutGames()
             }
           })
-          .catch(error =>
+          .catch((error) =>
             this.$toast.error('Error checking-out game(s): ' + error),
           )
       } else {
@@ -288,13 +293,13 @@ export default {
       }
     },
     deleteCheckedOutGames() {
-      let promises = this.selected.map(id => libraryService.deleteGame(id))
+      let promises = this.selected.map((id) => libraryService.deleteGame(id))
 
       Promise.all(promises)
         .then(() => {
           this.$toast.success(`Checked-out ${promises.length} game(s)!`)
         })
-        .catch(response => {
+        .catch((response) => {
           this.$toast.error(
             'Error checking-out game(s): ' +
               axiosUtils.getErrorDescription(response),
@@ -316,7 +321,7 @@ export default {
       }
 
       Object.keys(this.filters).forEach(
-        key => (params[key] = this.filters[key]),
+        (key) => (params[key] = this.filters[key]),
       )
 
       return params
@@ -325,19 +330,18 @@ export default {
       this.selectedGame = game
       this.$bvModal.show('checkin-modal')
     },
-    searchPlayers(query) {
-      playerService.searchPlayers(query).then(response => {
-        this.players = response
-      })
-    },
   },
 
   watch: {
     search() {
+      // anytime the search string is change we should reset page number
+      // otherwise the user could face a 404 because the page is not available for the search results
+      this.currentPage = 1
+
       this.refreshGames()
     },
     filters: {
-      handler: function() {
+      handler: function () {
         this.refreshGames()
       },
       deep: true,
