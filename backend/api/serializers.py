@@ -56,7 +56,8 @@ class BggGameSerializer(serializers.ModelSerializer):
             'max_playtime',
             'min_players',
             'max_players',
-            'badges'
+            'badges',
+            'other_names'
         )
 
 

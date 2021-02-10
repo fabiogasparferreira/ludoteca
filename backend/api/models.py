@@ -42,8 +42,8 @@ class Location(models.Model):
 
 
 class BggGame(models.Model):
-    bggid = models.CharField(max_length=300, primary_key=True)
-    name = models.CharField(max_length=300)
+    bggid = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=200)
 
     badges = models.ManyToManyField(Badge, blank=True, default=None)
 
@@ -54,6 +54,7 @@ class BggGame(models.Model):
     max_playtime = models.IntegerField(null=True)
     thumbnail = models.CharField(blank=True, max_length=500, default='')
     image = models.CharField(blank=True, max_length=500)
+    other_names = models.JSONField(blank=True, default=list)
 
     @staticmethod
     def most_withdraws(number):
