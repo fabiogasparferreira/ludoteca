@@ -63,11 +63,12 @@
             :bulk="bulk"
             :game="game"
             :value="game.id"
-            v-on:checkin="openLocationModal(game)"
-            v-on:change-location="openLocationModal(game)"
+            @checkin="openLocationModal(game)"
+            @change-location="openLocationModal(game)"
           />
         </b-col>
       </b-row>
+
       <!-- Skeleton -->
       <b-row v-show="loading">
         <b-col v-for="index in new Array(50)" v-bind:key="index" lg="6" sm="12">
@@ -93,7 +94,7 @@
         id="checkin-modal"
         :game="selectedGame"
         :shelves="$store.getters['library/locations']"
-        v-on:done="refreshGames"
+        @done="refreshGames"
       />
     </div>
 
@@ -186,11 +187,11 @@
 import gamesMixin from '@/mixins/games.mixin'
 import libraryService from '@/services/library.service'
 import Header from '@/components/Header'
-import LibraryGameCard from '@/components/LibraryGameCard'
+import LibraryGameCard from '@/components/cards/LibraryGameCard'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
 import playerService from '@/services/player.service'
 import CheckinModal from '@/components/CheckinModal'
-import ItemCard from '@/components/ItemCard'
+import ItemCard from '@/components/cards/ItemCard'
 import usersMixin from '@/mixins/users.mixin'
 import axiosUtils from '@/mixins/axios.utils'
 import Pagination from '@/components/Pagination'

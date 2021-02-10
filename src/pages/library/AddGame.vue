@@ -109,7 +109,7 @@ import PersonCard from '@/components/PersonCard'
 import gamesMixin from '@/mixins/games.mixin'
 import formMixin from '@/mixins/form.mixins'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
-import GameCard from '@/components/GameCard'
+import GameCard from '@/components/cards/GameCard'
 import WizardScreen from '@/components/templates/WizardScreen'
 import FormSelect from '@/components/FormSelect'
 

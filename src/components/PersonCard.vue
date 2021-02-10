@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ItemCard from '@/components/ItemCard'
+import ItemCard from '@/components/cards/ItemCard'
 import personMixin from '@/mixins/person.mixin'
 
 export default {

@@ -7,7 +7,14 @@
           <div
             v-if="bulk"
             class="p-0 position-absolute d-flex text-center justify-content-center align-items-center"
-            style="background-color: rgba(255,255,255,0.9); z-index: 1; top:0; left:0; right:0;bottom:0;"
+            style="
+              background-color: rgba(255, 255, 255, 0.9);
+              z-index: 1;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+            "
           >
             <b-button
               v-if="game.status === 'available'"
@@ -24,29 +31,41 @@
       </template>
 
       <template v-slot:metadata>
-        <b-icon-person-fill class="text-muted mr-2"></b-icon-person-fill>
-        <span class=" text-muted">{{
-          num_players(game.game.min_players, game.game.max_players)
-        }}</span>
-        <b-icon-clock-fill
-          class="ml-4 mr-2 text-muted"
-          font-scale="0.8"
-        ></b-icon-clock-fill>
-        <span class=" text-muted"
-          >{{ playtime(game.game.min_playtime, game.game.max_playtime) }}
-        </span>
+        <div v-if="!$store.getters['users/current'].is_staff">
+          <metadata-item
+            icon="person-fill"
+            class="d-inline-block"
+            :text="
+              num_players(
+                game.game.min_players,
+                game.game.max_players,
+              ).toString()
+            "
+          />
 
-        <b-icon-briefcase-fill
-          class="text-muted ml-4 mr-2"
-        ></b-icon-briefcase-fill>
+          <metadata-item
 
-        <span class=" text-muted">{{ game.owner.name }}</span>
+            icon="clock-fill"
+            :text="
+              playtime(
+                game.game.min_playtime,
+                game.game.max_playtime.toString(),
+              )
+            "
+          />
+        </div>
+
+        <div v-else>
+          <metadata-item icon="briefcase-fill" :text="game.owner.name"/>
+          <metadata-item icon="geo-alt-fill" :text="game.location.name"/>
+
+        </div>
       </template>
 
       <!-- Buttons -->
       <template v-slot:top-right>
         <div
-          v-if="isAuthenticated()"
+          v-if="$store.getters['users/current'].is_staff"
           class="d-flex flex-row align-items-center flex-nowrap"
         >
           <b-button
@@ -57,8 +76,8 @@
           >
             <span class="text-muted">WITHDRAW</span>
             <span v-if="game.location" class="text-muted">
-              ({{ game.location.name }})</span
-            >
+              ({{ game.location.name }})
+            </span>
           </b-button>
           <b-button
             v-show="game.status === 'not-checked-in'"
@@ -76,7 +95,7 @@
             @click="returnGame(game)"
           >
             <span class="text-muted">RETURN</span>
-            <span class="text-muted" v-if="game.location">
+            <span v-if="game.location" class="text-muted">
               ({{ game.location.name }})</span
             ></b-button
           >
@@ -99,15 +118,17 @@
 
 <script>
 import withdrawService from '@/services/withdraw.service'
-import GameCard from '@/components/GameCard'
+import GameCard from '@/components/cards/GameCard'
 import usersMixin from '@/mixins/users.mixin'
 import gamesMixin from '@/mixins/games.mixin'
 import personMixin from '@/mixins/person.mixin'
+import MetadataItem from '@/components/cards/MetadataItem'
 
 export default {
   name: 'LibraryGame',
   components: {
     GameCard,
+    MetadataItem,
   },
   mixins: [usersMixin, gamesMixin, personMixin],
   props: {

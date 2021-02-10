@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ItemCard from '@/components/ItemCard'
+import ItemCard from '@/components/cards/ItemCard'
 import gamesMixin from '@/mixins/games.mixin'
 
 export default {

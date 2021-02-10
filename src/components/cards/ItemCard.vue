@@ -19,12 +19,11 @@
           <div
             class="d-flex flex-row flex-grow-1 align-items-center justify-content-between"
           >
-            <div>
+
               <slot name="metadata"></slot>
-            </div>
-            <div>
+
               <slot name="bottom-right"></slot>
-            </div>
+
           </div>
         </div>
       </div>
