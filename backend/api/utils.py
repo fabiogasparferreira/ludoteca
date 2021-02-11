@@ -62,7 +62,7 @@ def get_external_game(bgg_id):
             time.sleep(10)
 
         except Exception as err:
-            print('err')
+            print('[ERROR] Exceptio caught getting external game: ' + err)
             max_count -= 1
             time.sleep(10)
 
