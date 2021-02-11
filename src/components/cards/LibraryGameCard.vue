@@ -31,7 +31,7 @@
       </template>
 
       <template v-slot:metadata>
-        <div v-if="!$store.getters['users/current'].is_staff">
+        <div v-if="$store.getters['users/current'].is_staff">
           <metadata-item
             :text="
               num_players(
