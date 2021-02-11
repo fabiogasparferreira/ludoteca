@@ -33,32 +33,25 @@
       <template v-slot:metadata>
         <div v-if="!$store.getters['users/current'].is_staff">
           <metadata-item
-            icon="person-fill"
-            class="d-inline-block"
             :text="
               num_players(
                 game.game.min_players,
                 game.game.max_players,
               ).toString()
             "
+            class="d-inline-block"
+            icon="person-fill"
           />
 
           <metadata-item
-
+            :text="playtime(game.game.min_playtime, game.game.max_playtime)"
             icon="clock-fill"
-            :text="
-              playtime(
-                game.game.min_playtime,
-                game.game.max_playtime.toString(),
-              )
-            "
           />
         </div>
 
         <div v-else>
-          <metadata-item icon="briefcase-fill" :text="game.owner.name"/>
-          <metadata-item icon="geo-alt-fill" :text="game.location.name"/>
-
+          <metadata-item :text="game.owner.name" icon="briefcase-fill" />
+          <metadata-item :text="game.location.name" icon="geo-alt-fill" />
         </div>
       </template>
 

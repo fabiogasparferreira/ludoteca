@@ -13,12 +13,12 @@ export default {
   name: 'MetadataItem',
   props: {
     icon: {
-      default: 'bi-patch-question-fill',
+      required: true,
       type: String,
     },
     text: {
-      default: 'N/A',
-      type: String,
+      required: true,
+      type: [String, Number]
     },
   },
 }
