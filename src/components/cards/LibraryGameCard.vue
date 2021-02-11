@@ -33,7 +33,7 @@
       <template v-slot:metadata>
         <div v-if="$store.getters['users/current'].is_staff">
           <metadata-item :text="game.owner.name" icon="briefcase-fill" />
-          <metadata-item :text="game.location.name" icon="geo-alt-fill" />
+          <metadata-item v-if="game.location" :text="game.location.name" icon="geo-alt-fill" />
         </div>
 
         <div v-else>
