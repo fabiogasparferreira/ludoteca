@@ -14,7 +14,7 @@ from backend.api.filters import LibraryGameFilter
 from backend.api.models import LibraryGame, Withdraw, Location, Supplier, BggGame
 from backend.api.serializers import LibraryGameSerializer, UserSerializer, PlayerSerializer, WithdrawSerializer, \
     LocationSerializer, SupplierSerializer, BggGameSerializer
-from backend.api.utils import BggGameUtils
+from backend.api import utils
 
 User = get_user_model()
 
@@ -58,10 +58,10 @@ class LibraryGameViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         bggid = serializer.initial_data['game_id']
-        game = BggGameUtils.find(bggid)
+        game = utils.BGGGame.find(bggid)
 
         if game is None:
-            game = BggGameUtils.create(bggid)
+            game = utils.BGGGame.create(bggid)
 
         serializer.is_valid()
         serializer.save(game=game)

@@ -1,17 +1,11 @@
-import csv
-import time
-from io import StringIO
-
-import boardgamegeek
 import pandas as pd
-import requests
 from boardgamegeek import BGGClient
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from backend.api.models import BggGame, LibraryGame, Location
-from backend.api.utils import BggGameUtils
+from backend.api import utils
+from backend.api.models import Location
 
 User = get_user_model()
 
@@ -23,84 +17,11 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('file')
 
-    def find(self, query):
-        max_count = 10
-        while max_count:
-            try:
-                rs = bgg.search(query)
-
-                if rs:
-                    print('Successfully fetch game: ' + rs[0].name + str())
-                    return bgg.game(game_id=rs[0].id)
-
-            except boardgamegeek.exceptions.BGGValueError:
-                print('[ERROR] Invalid parameters')
-                raise
-
-            except boardgamegeek.exceptions.BGGApiRetryError:
-                print('[ERROR] Retry after delay, retrying...')
-                max_count -= 1
-                time.sleep(10)
-
-            except boardgamegeek.exceptions.BGGApiError:
-                print('[ERROR] API response invalid or not parsed')
-                max_count -= 1
-                time.sleep(10)
-
-            except boardgamegeek.exceptions.BGGApiTimeoutError:
-                print('[ERROR] Timeout')
-                max_count -= 1
-                time.sleep(10)
-
-            except Exception as err:
-                print('err')
-                max_count -= 1
-                time.sleep(10)
-
-        raise Exception
-
-    def create_bgg(self, game):
-        return BggGameUtils.create(game.id)
-
-    def create_player(self, username):
-        player = User()
-        player.username = username
-        player.email = username + '@' + 'dumbmail.com'
-        player.first_name = username
-        player.save()
-        return player
-
     def add_game(self, bggid, owners):
         for owner in owners:
-            self.add_game_to_owner(bggid, owner.strip())
+            utils.Library.create(bggid, owner.strip())
 
-    def add_game_to_owner(self, bggid, owner):
-        search = BggGame.objects.filter(bggid=bggid)
-        if search.count():
-            bgggame = search.first()
-        else:
-
-            response = self.find(bggid)
-
-            bgggame = self.create_bgg(response)
-
-        if bgggame:
-            playersfilter = User.objects.filter(username=owner)
-
-            if playersfilter.count():
-                player = playersfilter.first()
-            else:
-                player = self.create_player(owner)
-
-            game = LibraryGame(game=bgggame, owner=player)
-
-            game.game = bgggame
-
-            game.save()
-        else:
-            print('game not found (' + str(bggid) + ')')
-
-    @transaction.atomic
+    #@transaction.atomic
     def handle(self, *args, **options):
         print('------------------------------------')
         print('-- ludoteca dummy data generation --')
