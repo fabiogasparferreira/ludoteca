@@ -34,7 +34,7 @@ class Command(BaseCommand):
         # create locations
         # TODO: Move this to a config file
 
-        print('1. Create locations')
+        print('[1/4] Create locations')
         locations = [
             'A1', 'A2', 'A3', 'A4', 'A5',
             'B1', 'B2', 'B3', 'B4', 'B5',
@@ -49,10 +49,8 @@ class Command(BaseCommand):
             location_object.name = location
             location_object.save()
 
-        print('Done')
-
         # create players
-        print('2. Create users')
+        print('[2/4] Create users')
         # TODO: Move this to a config file
         reader = pd.read_csv('https://my.api.mockaroo.com/players.json?key=5dec1ef0', header=0, delimiter=',')
 
@@ -66,13 +64,13 @@ class Command(BaseCommand):
             user.username = row['username']
             user.save()
 
-        print('Done')
 
-        print('3. Create library games')
+        print('[3/4] Create library games')
         # load library from file
         skipped = []
-        table = pd.read_csv('backend/bgggames_table.csv', header=0, delimiter=';')
-        for _, row in table.iterrows():
+        df = pd.read_json('backend/api_bgggame.json')
+        for _, row in df.iterrows():
+            utils.BGGGame.create()
             bgggame = BggGame()
             bgggame.bggid = row['bggid']
             bgggame.name = row['name']
@@ -100,9 +98,7 @@ class Command(BaseCommand):
             else:
                 print('game without id')
 
-        print(f'Done (number of games skipped: {len(skipped)})')
-
-        print('4. Set library games location and randomize status')
+        print('[4/4] Set library games location and randomize status')
         shelves = Location.objects.all()
 
         statuses = ['not-checkedin', 'available', 'not-available', 'checkedout']
@@ -141,5 +137,4 @@ class Command(BaseCommand):
                 game.date_checkout = timezone.now()
 
             game.save()
-        print('Done')
         print('Exiting...')
