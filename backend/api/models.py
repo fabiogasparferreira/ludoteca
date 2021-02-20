@@ -114,6 +114,14 @@ class UsedGame(Game):
     price = models.FloatField(default=0.0, blank=False, null=False)
 
 
+class StoreGame(models.Model):
+    game = models.ForeignKey(BggGame, null=True, blank=True, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Supplier, null=True, blank=True, on_delete=models.CASCADE)
+    selling_price = models.FloatField(default=0.0, blank=False, null=False)
+    selling_price_associate = models.FloatField(default=0.0, blank=False, null=False)
+    buying_price = models.FloatField(default=0.0, blank=False, null=False)
+
+
 class Withdraw(models.Model):
     requisitor = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     game = models.ForeignKey(LibraryGame, on_delete=models.CASCADE)
