@@ -1,14 +1,14 @@
 <template>
   <b-skeleton-wrapper :loading="loading">
-    <b-card class="mb-3 mb-md-3 border border-1" :bg-variant="variant">
+    <b-card class="mb-2 mb-sm-3" :bg-variant="variant" >
       <div class="media">
         <!-- left content-->
-        <div class="media-left mr-3">
+        <div class="media-aside">
           <slot name="image"></slot>
         </div>
 
         <!-- body -->
-        <div class="media-body align-self-stretch d-flex flex-column">
+        <b-media-body class="align-self-stretch d-flex flex-column">
           <div
             class="d-flex flex-row flex-grow-1 align-items-center justify-content-between"
           >
@@ -21,11 +21,10 @@
           >
 
               <slot name="metadata"></slot>
-
               <slot name="bottom-right"></slot>
 
           </div>
-        </div>
+        </b-media-body>
       </div>
     </b-card>
   </b-skeleton-wrapper>

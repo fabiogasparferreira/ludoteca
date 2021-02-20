@@ -4,7 +4,7 @@ import StoreHome from '@/pages/store/Home'
 import LibraryHome from '@/pages/library/Home'
 import Login from './pages/Login'
 
-import HomeTemplate from '@/pages/templates/HomeTemplate'
+// import HomeTemplate from '@/pages/templates/HomeTemplate'
 import WithdrawGame from '@/pages/library/WithdrawGame'
 import AddGame from '@/pages/library/AddGame'
 import LibraryDashboard from '@/pages/library/Dashboard'
@@ -24,10 +24,10 @@ function guardAuthenticated(to, from, next) {
 }
 
 const routes = [
-  {
-    path: '',
-    component: HomeTemplate,
-    children: [
+  // {
+    // path: '',
+    // component: HomeTemplate,
+    // children: [
       {
         path: '/',
         name: 'Home',
@@ -51,8 +51,8 @@ const routes = [
         name: 'StoreHome',
         component: StoreHome,
       },
-    ],
-  },
+  //   ],
+  // },
 
   {
     path: '/library/new',

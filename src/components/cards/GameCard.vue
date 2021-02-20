@@ -7,7 +7,7 @@
   >
     <template v-slot:image>
       <slot name="image">
-        <b-avatar :src="game.thumbnail" rounded size="lg"></b-avatar>
+        <b-avatar :src="game.thumbnail" size="xl"></b-avatar>
       </slot>
     </template>
     <!--    <template v-slot:badges>-->

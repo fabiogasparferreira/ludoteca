@@ -1,46 +1,48 @@
 <template>
-  <b-container>
-    <b-row class="justify-content-center mb-7 mt-5">
-      <b-col cols="12" xl="10">
-        <b-row class="justify-content-center">
-          <b-col>
-            <b-button :to="backTo">
-              <b-icon-arrow-left />
-              <span class="d-none d-sm-inline-block">back</span>
-            </b-button>
-          </b-col>
-          <b-col class="text-center d-flex align-items-center" cols="auto">
-            <!-- Pretitle -->
-            <!--        <h6 class=" text-uppercase text-muted">-->
-            <!--          {{ preTitle }}-->
-            <!--        </h6>-->
+  <div>
+    <!--    <b-navbar class="py-5">-->
+    <b-container>
+      <div
+        class="d-flex row align-content-between justify-content-between w-100 pt-6 pb-4"
+      >
+        <!--        <b-col>-->
 
-            <!-- Title -->
-            <h1 class="mb-0">
-              {{ title }}
-            </h1>
-          </b-col>
-          <b-col class="d-flex justify-content-end align-items-center">
-            <UserInfo />
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
+        <!--                <b-button :to="backTo" variant="white" class="btn btn-lg btn-rounded-circle "><b-icon-arrow-left /></b-button>-->
+        <!--            </b-col>-->
 
-    <b-row class="justify-content-center">
-      <b-col lg="10" md="12" sm="12" xl="8">
-        <slot name="content"></slot>
-      </b-col>
-    </b-row>
-  </b-container>
+
+
+
+        <!-- Title -->
+        <div>
+                       <h6 class=" text-uppercase text-muted">
+                  {{ preTitle }}
+                </h6>
+          <h1 class="mb-0">
+            {{ title }}
+          </h1>
+        </div>
+        <div>
+          <b-button variant="primary">Save</b-button>
+        </div>
+      </div>
+    </b-container>
+    <!--    </b-navbar>-->
+    <hr  class="mt-0"/>
+    <b-container class="mt-6">
+      <b-row class="justify-content-center">
+        <b-col lg="10" md="12" sm="12" xl="8">
+          <slot name="content"></slot>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
-import UserInfo from '@/components/UserInfo'
-
 export default {
   name: 'InputScreen',
-  components: { UserInfo },
+  components: {},
   props: {
     preTitle: {},
     title: {},

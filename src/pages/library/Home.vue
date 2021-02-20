@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container>
     <Header :pretitle="pretitle" :title="title">
       <template v-slot:content-right>
         <div v-if="isAuthenticated()">
@@ -49,46 +49,63 @@
     </b-row>
 
     <Filters v-model="filters" collapse-id="filters-collapse">
-      <FilterSelect v-model="filters" id="location" label="Location" :options="$store.getters['library/locations']"/>
-      <FilterSelect v-model="filters" id="player" label="Owner" :options="$store.getters['library/players']" @search="searchPlayers"/>
+      <FilterSelect
+        v-model="filters"
+        id="location"
+        label="Location"
+        :options="$store.getters['library/locations']"
+      />
+      <FilterSelect
+        v-model="filters"
+        id="player"
+        label="Owner"
+        :options="$store.getters['library/players']"
+        @search="searchPlayers"
+      />
     </Filters>
 
     <!-- Content -->
     <div class="mt-4">
-      <b-row v-show="!loading">
-        <!-- Games list -->
-        <b-col v-for="(game, index) in games" :key="index" cols="12" lg="6">
-          <LibraryGameCard
-            v-model="selected"
-            :bulk="bulk"
-            :game="game"
-            :value="game.id"
-            @checkin="openLocationModal(game)"
-            @change-location="openLocationModal(game)"
-          />
-        </b-col>
-      </b-row>
 
-      <!-- Skeleton -->
-      <b-row v-show="loading">
-        <b-col v-for="index in new Array(50)" v-bind:key="index" lg="6" sm="12">
-          <ItemCard>
-            <template #image>
-              <b-skeleton
-                height="3.5rem"
-                type="avatar"
-                width="3.5rem"
-              ></b-skeleton>
-            </template>
-            <template #metadata>
-              <b-skeleton class="text-muted" width="100px" />
-            </template>
-            <template #top-right>
-              <b-skeleton size="sm" type="button" width="75px"></b-skeleton>
-            </template>
-          </ItemCard>
-        </b-col>
-      </b-row>
+          <b-row v-show="!loading">
+            <!-- Games list -->
+            <b-col v-for="(game, index) in games" :key="index" cols="12" lg="6">
+              <LibraryGameCard
+                v-model="selected"
+                :bulk="bulk"
+                :game="game"
+                :value="game.id"
+                @checkin="openLocationModal(game)"
+                @change-location="openLocationModal(game)"
+              />
+            </b-col>
+          </b-row>
+
+          <!-- Skeleton -->
+          <b-row v-show="loading">
+            <b-col
+              v-for="index in new Array(50)"
+              v-bind:key="index"
+              lg="6"
+              sm="12"
+            >
+              <ItemCard>
+                <template #image>
+                  <b-skeleton
+                    height="3.5rem"
+                    type="avatar"
+                    width="3.5rem"
+                  ></b-skeleton>
+                </template>
+                <template #metadata>
+                  <b-skeleton class="text-muted" width="100px" />
+                </template>
+                <template #top-right>
+                  <b-skeleton size="sm" type="button" width="75px"></b-skeleton>
+                </template>
+              </ItemCard>
+            </b-col>
+          </b-row>
 
       <CheckinModal
         id="checkin-modal"
@@ -180,7 +197,7 @@
     </div>
 
     <ModalPlayerSelect id="filter-players-modal"></ModalPlayerSelect>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -353,6 +370,4 @@ export default {
   },
 }
 </script>
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>
