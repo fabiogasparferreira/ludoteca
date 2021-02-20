@@ -1,6 +1,6 @@
 <template>
   <b-skeleton-wrapper :loading="loading">
-    <b-card class="card border border-1" :bg-variant="variant">
+    <b-card class="mb-3 mb-md-3 border border-1" :bg-variant="variant">
       <div class="media">
         <!-- left content-->
         <div class="media-left mr-3">
@@ -53,5 +53,3 @@ export default {
   },
 }
 </script>
-
-<style scoped></style>

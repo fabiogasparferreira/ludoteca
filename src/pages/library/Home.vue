@@ -353,12 +353,6 @@ export default {
   },
 }
 </script>
-<style>
-.custom-control-label {
-  width: 100%;
-}
+<style lang="scss">
 
-.custom-control-input {
-  display: none;
-}
 </style>
