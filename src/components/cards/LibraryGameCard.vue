@@ -1,42 +1,49 @@
 <template>
   <div>
-    <GameCard :bg-variant="bgVariant" :bulk="bulk" :game="game.game">
-      <!-- Image (or checkbox if enabled)-->
-      <template v-slot:image>
-        <div class="position-relative">
-          <div
-            v-if="bulk"
-            class="p-0 position-absolute d-flex text-center justify-content-center align-items-center"
-            style="
-              background-color: rgba(255, 255, 255, 0.9);
-              z-index: 1;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-            "
-          >
-            <b-button
-              v-if="game.status === 'available'"
-              :pressed="checked.includes(value)"
-              variant="outline-dark"
-              @click="click"
-            >
-              <b-icon-check />
-            </b-button>
-          </div>
+    <!-- Image (or checkbox if enabled)-->
+    <!--      <template v-slot:image>-->
+    <!--        <div class="position-relative">-->
+    <!--          <div-->
+    <!--            v-if="bulk"-->
+    <!--            class="p-0 position-absolute d-flex text-center justify-content-center align-items-center"-->
+    <!--            style="-->
+    <!--              background-color: rgba(255, 255, 255, 0.9);-->
+    <!--              z-index: 1;-->
+    <!--              top: 0;-->
+    <!--              left: 0;-->
+    <!--              right: 0;-->
+    <!--              bottom: 0;-->
+    <!--            "-->
+    <!--          >-->
+    <!--            <b-button-->
+    <!--              v-if="game.status === 'available'"-->
+    <!--              :pressed="checked.includes(value)"-->
+    <!--              variant="outline-dark"-->
+    <!--              @click="click"-->
+    <!--            >-->
+    <!--              <b-icon-check />-->
+    <!--            </b-button>-->
+    <!--          </div>-->
 
-          <b-avatar :src="game.game.thumbnail" rounded size="lg"></b-avatar>
-        </div>
-      </template>
-
-      <template v-slot:metadata>
+    <!--          <b-avatar :src="game.game.thumbnail" rounded size="lg"></b-avatar>-->
+    <!--        </div>-->
+    <!--      </template>-->
+    <GameCard
+      :image="game.game.image"
+      :title="game.game.name"
+      :no-footer="!$store.getters['users/current'].is_staff"
+    >
+      <template #metadata>
         <div v-if="$store.getters['users/current'].is_staff">
           <metadata-item :text="game.owner.name" icon="briefcase-fill" />
-          <metadata-item v-if="game.location" :text="game.location.name" icon="geo-alt-fill" />
+          <metadata-item
+            v-if="game.location"
+            :text="game.location.name"
+            icon="geo-alt-fill"
+          />
         </div>
 
-        <div v-else>
+        <div v-else class="flex flex-column">
           <metadata-item
             :text="num_players(game.game.min_players, game.game.max_players)"
             icon="person-fill"
@@ -48,44 +55,48 @@
         </div>
       </template>
 
+      <template #footer v-if="$store.getters['users/current'].is_staff">
+
+        <b-button
+          v-show="game.status === 'available'"
+          :to="{ name: 'WithdrawGame', params: { id: game.id } }"
+          size="sm"
+          variant="light"
+        >
+          <span class="text-muted">WITHDRAW</span>
+          <span v-if="game.location" class="text-muted">
+            ({{ game.location.name }})
+          </span>
+        </b-button>
+
+        <b-button
+          v-show="game.status === 'not-checked-in'"
+          v-b-modal.checkin-modal
+          size="sm"
+          variant="light"
+          @click="$emit('checkin', game)"
+        >
+          <span class="text-muted">CHECK-IN</span>
+        </b-button>
+
+        <b-button
+          v-show="game.status === 'not-available'"
+          size="sm"
+          variant="light"
+          @click="returnGame(game)"
+        >
+          <span class="text-muted">RETURN</span>
+
+        </b-button>
+
+      </template>
+
       <!-- Buttons -->
-      <template v-slot:top-right>
+      <template #top-right>
         <div
           v-if="$store.getters['users/current'].is_staff"
           class="d-flex flex-row align-items-center flex-nowrap"
-        >
-          <b-button
-            v-show="game.status === 'available'"
-            :to="{ name: 'WithdrawGame', params: { id: game.id } }"
-            size="sm"
-            variant="white"
-          >
-            <span class="text-muted">WITHDRAW</span>
-            <span v-if="game.location" class="text-muted">
-              ({{ game.location.name }})
-            </span>
-          </b-button>
-          <b-button
-            v-show="game.status === 'not-checked-in'"
-            v-b-modal.checkin-modal
-            size="sm"
-            variant="white"
-            @click="$emit('checkin', game)"
-          >
-            <span class="text-muted">CHECK-IN</span>
-          </b-button>
-          <b-button
-            v-show="game.status === 'not-available'"
-            size="sm"
-            variant="white"
-            @click="returnGame(game)"
-          >
-            <span class="text-muted">RETURN</span>
-            <span v-if="game.location" class="text-muted">
-              ({{ game.location.name }})</span
-            ></b-button
-          >
-        </div>
+        ></div>
       </template>
 
       <template v-slot:bottom-right>

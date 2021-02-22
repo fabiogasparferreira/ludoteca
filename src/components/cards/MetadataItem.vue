@@ -1,5 +1,5 @@
 <template>
-  <div class="mr-4 d-inline-block" v-b-tooltip.hover :title="tooltip">
+  <div class="mr-4 mt-2 d-block" v-b-tooltip.hover :title="tooltip">
     <b-icon :icon="icon" class="text-muted mr-2"/>
 
     <span class="text-muted">

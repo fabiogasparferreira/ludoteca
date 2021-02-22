@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import StoreHome from '@/pages/store/Home'
-import LibraryHome from '@/pages/library/Home'
+import LibraryHome from '@/pages/library/home/Home'
 import Login from './pages/Login'
 
 // import HomeTemplate from '@/pages/templates/HomeTemplate'

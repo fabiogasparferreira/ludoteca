@@ -66,46 +66,87 @@
 
     <!-- Content -->
     <div class="mt-4">
+      <b-row>
+        <!-- Games list -->
+        <b-col
+          v-for="(game, index) in games"
+          :key="index"
+          cols="6"
+          md="4"
+          xl="3"
+        >
+          <GameCard
+            :loading="loading"
+            :image="game.game.image"
+            :title="game.game.name"
+            :no-footer="!$store.getters['users/current'].is_staff"
+          >
+            <template #metadata>
+              <div v-if="$store.getters['users/current'].is_staff">
+                <metadata-item :text="game.owner.name" icon="briefcase-fill" />
+                <metadata-item
+                  v-if="game.location"
+                  :text="game.location.name"
+                  icon="geo-alt-fill"
+                />
+              </div>
 
-          <b-row v-show="!loading">
-            <!-- Games list -->
-            <b-col v-for="(game, index) in games" :key="index" cols="12" lg="6">
-              <LibraryGameCard
-                v-model="selected"
-                :bulk="bulk"
-                :game="game"
-                :value="game.id"
-                @checkin="openLocationModal(game)"
-                @change-location="openLocationModal(game)"
-              />
-            </b-col>
-          </b-row>
+              <div v-else class="flex flex-column">
+                <metadata-item
+                  :text="
+                    num_players(game.game.min_players, game.game.max_players)
+                  "
+                  icon="person-fill"
+                />
+                <metadata-item
+                  :text="
+                    playtime(game.game.min_playtime, game.game.max_playtime)
+                  "
+                  icon="clock-fill"
+                />
+              </div>
+            </template>
 
-          <!-- Skeleton -->
-          <b-row v-show="loading">
-            <b-col
-              v-for="index in new Array(50)"
-              v-bind:key="index"
-              lg="6"
-              sm="12"
-            >
-              <ItemCard>
-                <template #image>
-                  <b-skeleton
-                    height="3.5rem"
-                    type="avatar"
-                    width="3.5rem"
-                  ></b-skeleton>
-                </template>
-                <template #metadata>
-                  <b-skeleton class="text-muted" width="100px" />
-                </template>
-                <template #top-right>
-                  <b-skeleton size="sm" type="button" width="75px"></b-skeleton>
-                </template>
-              </ItemCard>
-            </b-col>
-          </b-row>
+            <template #status>
+              <span v-if="game.status === 'not-available'" class="text-warning"
+                >{{ game.current_withdraw.requisitor.name }}
+              </span>
+              <span v-if="game.status === 'available'" class="text-success"
+                >Available</span
+              >
+            </template>
+            <template #actions>
+              <b-button
+                v-show="game.status === 'available'"
+                :to="{ name: 'WithdrawGame', params: { id: game.id } }"
+                size="sm"
+                variant="light"
+              >
+                <span class="text-muted">WITHDRAW</span>
+              </b-button>
+
+              <b-button
+                v-if="game.status === 'not-checked-in'"
+                v-b-modal.checkin-modal
+                size="sm"
+                variant="light"
+                @click="$emit('checkin', game)"
+              >
+                <span class="text-muted">CHECK-IN</span>
+              </b-button>
+
+              <b-button
+                v-if="game.status === 'not-available'"
+                size="sm"
+                variant="light"
+                @click="returnGame(game)"
+              >
+                <span class="text-muted">RETURN</span>
+              </b-button>
+            </template>
+          </GameCard>
+        </b-col>
+      </b-row>
 
       <CheckinModal
         id="checkin-modal"
@@ -204,11 +245,12 @@
 import gamesMixin from '@/mixins/games.mixin'
 import libraryService from '@/services/library.service'
 import Header from '@/components/Header'
-import LibraryGameCard from '@/components/cards/LibraryGameCard'
+import GameCard from '@/components/cards/GameCard'
+import MetadataItem from '@/components/cards/MetadataItem'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
 import playerService from '@/services/player.service'
 import CheckinModal from '@/components/CheckinModal'
-import ItemCard from '@/components/cards/ItemCard'
+// import ItemCard from '@/components/cards/ItemCard'
 import usersMixin from '@/mixins/users.mixin'
 import axiosUtils from '@/mixins/axios.utils'
 import Pagination from '@/components/Pagination'
@@ -222,7 +264,7 @@ export default {
   data() {
     return {
       search: '',
-      games: [],
+      games: new Array(50).fill({ game: { name: '', image: '' }, owner: { name: '' } }),
       loading: true,
       bulk: false,
       selected: [],
@@ -248,9 +290,10 @@ export default {
     Pagination,
     CheckinModal,
     ModalPlayerSelect,
-    LibraryGameCard,
+    MetadataItem,
+    GameCard,
     Header,
-    ItemCard,
+    // ItemCard,
     Filters,
     FilterSelect,
   },

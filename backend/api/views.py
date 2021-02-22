@@ -1,3 +1,5 @@
+import time
+
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.views.decorators.cache import never_cache
@@ -55,6 +57,14 @@ class LibraryGameViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
     authentication_classes = [authentication.JWTAuthentication]
     pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+
+        return LibraryGame.objects.order_by('game__name')
 
     def perform_create(self, serializer):
         bggid = serializer.initial_data['game_id']
