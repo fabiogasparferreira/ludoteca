@@ -50,6 +50,7 @@ export default {
   methods: {
     clearFilters() {
       this.filtersModel.filtersSelected = {}
+      this.$emit('input', this.filtersModel)
     },
   },
   Model: FiltersModel

@@ -57,7 +57,7 @@
       />
       <FilterSelect
         v-model="filters"
-        id="player"
+        id="owner"
         label="Owner"
         :options="$store.getters['library/players']"
         @search="searchPlayers"
@@ -65,8 +65,8 @@
     </Filters>
 
     <!-- Content -->
-    <div class="mt-4">
-      <b-row>
+    <div class="mt-5">
+      <b-row class="">
         <!-- Games list -->
         <b-col
           v-for="(game, index) in games"
@@ -76,18 +76,21 @@
           xl="3"
         >
           <GameCard
+            :game_id="game.id"
             :loading="loading"
             :image="game.game.image"
             :title="game.game.name"
             :no-footer="!$store.getters['users/current'].is_staff"
+            :selectable="isGameSelectable(game)"
+            :selected="selected.includes(game.id)"
+            @selected-change="updateSelected"
           >
             <template #metadata>
               <div v-if="$store.getters['users/current'].is_staff">
                 <metadata-item :text="game.owner.name" icon="briefcase-fill" />
                 <metadata-item
-                  v-if="game.location"
-                  :text="game.location.name"
-                  icon="geo-alt-fill"
+                  :text="game.location ? game.location.name : 'Not available'"
+                  icon="geo-fill"
                 />
               </div>
 
@@ -115,34 +118,73 @@
                 >Available</span
               >
             </template>
+
             <template #actions>
-              <b-button
-                v-show="game.status === 'available'"
-                :to="{ name: 'WithdrawGame', params: { id: game.id } }"
-                size="sm"
-                variant="light"
-              >
-                <span class="text-muted">WITHDRAW</span>
-              </b-button>
+              <div v-if="game.status === 'available'">
+                <b-link
+                  class="d-inline d-md-none"
+                  v-b-tooltip.hover
+                  title="Withdraw"
+                  :to="{ name: 'WithdrawGame', params: { id: game.id } }"
+                >
+                  <b-icon-arrow-up-circle
+                    font-scale="1.5"
+                    class="text-gray-700"
+                  />
+                </b-link>
 
-              <b-button
-                v-if="game.status === 'not-checked-in'"
-                v-b-modal.checkin-modal
-                size="sm"
-                variant="light"
-                @click="$emit('checkin', game)"
-              >
-                <span class="text-muted">CHECK-IN</span>
-              </b-button>
+                <b-button class="d-none d-md-inline" variant="light" size="sm" :to="{ name: 'WithdrawGame', params: { id: game.id } }">
+                  WITHDRAW
+                </b-button>
+              </div>
 
-              <b-button
-                v-if="game.status === 'not-available'"
-                size="sm"
-                variant="light"
-                @click="returnGame(game)"
-              >
-                <span class="text-muted">RETURN</span>
-              </b-button>
+              <div v-if="game.status === 'not-checked-in'">
+                <b-link
+                  class="d-inline d-md-none"
+                  v-b-modal.checkin-modal
+                  v-b-tooltip.hover
+                  title="Checkin"
+                  @click="openLocationModal(game)"
+                >
+                  <b-icon-patch-plus-fill
+                    font-scale="1.5"
+                    class="text-gray-700"
+                  />
+                </b-link>
+                              <b-button
+                  class="d-none d-md-inline"
+                  variant="light"
+                  size="sm"
+                  @click="openLocationModal(game)"
+                >
+                  CHECK-IN
+                </b-button>
+              </div>
+
+              <div v-if="game.status === 'not-available'">
+                <!-- Small width button -->
+                <b-link
+                  class="d-inline d-md-none"
+                  v-b-tooltip.hover
+                  title="Return"
+                  @click="returnGame(game)"
+                >
+                  <b-icon-arrow-down-circle-fill
+                    font-scale="1.5"
+                    class="text-gray-700"
+                  />
+                </b-link>
+
+                <!-- Medium width + button -->
+                <b-button
+                  class="d-none d-md-inline"
+                  variant="light"
+                  size="sm"
+                  @click="returnGame(game)"
+                >
+                  RETURN
+                </b-button>
+              </div>
             </template>
           </GameCard>
         </b-col>
@@ -185,22 +227,22 @@
         </div>
         <div class="col-auto mr-n3">
           <!-- Button -->
-          <b-button
-            v-if="games.length > selected.length"
-            class="btn-white-20"
-            size="sm"
-            @click="selectAll"
-          >
-            Select all
-          </b-button>
-          <b-button
-            v-else
-            class="btn-outline-white"
-            size="sm"
-            @click="unselectAll"
-          >
-            Unselect all
-          </b-button>
+<!--          <b-button-->
+<!--            v-if="games.length > selected.length"-->
+<!--            class="btn-white-20"-->
+<!--            size="sm"-->
+<!--            @click="selectAll"-->
+<!--          >-->
+<!--            Select all-->
+<!--          </b-button>-->
+<!--          <b-button-->
+<!--            v-else-->
+<!--            class="btn-outline-white"-->
+<!--            size="sm"-->
+<!--            @click="unselectAll"-->
+<!--          >-->
+<!--            Unselect all-->
+<!--          </b-button>-->
           <b-dropdown
             :disabled="selected.length === 0"
             class="ml-3"
@@ -250,13 +292,13 @@ import MetadataItem from '@/components/cards/MetadataItem'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
 import playerService from '@/services/player.service'
 import CheckinModal from '@/components/CheckinModal'
-// import ItemCard from '@/components/cards/ItemCard'
 import usersMixin from '@/mixins/users.mixin'
 import axiosUtils from '@/mixins/axios.utils'
 import Pagination from '@/components/Pagination'
 import Filters from '@/components/Filters'
 import FiltersButton from '@/components/FiltersButton'
 import FilterSelect from '@/components/FilterSelect'
+import withdrawService from "@/services/withdraw.service"
 
 export default {
   name: 'Home',
@@ -264,7 +306,11 @@ export default {
   data() {
     return {
       search: '',
-      games: new Array(50).fill({ game: { name: '', image: '' }, owner: { name: '' } }),
+      games: new Array(50).fill({
+        game: { name: '', image: '' },
+        owner: { name: '' },
+        id: 0
+      }),
       loading: true,
       bulk: false,
       selected: [],
@@ -293,7 +339,6 @@ export default {
     MetadataItem,
     GameCard,
     Header,
-    // ItemCard,
     Filters,
     FilterSelect,
   },
@@ -303,7 +348,11 @@ export default {
   },
   methods: {
     selectAll() {
-      this.selected = this.games.map((game) => game.id)
+      const availableGames = this.games.filter((game) =>
+        this.isGameSelectable(game),
+      )
+
+      availableGames.forEach((game) => this.updateSelected(game.id))
     },
     unselectAll() {
       this.selected = []
@@ -381,15 +430,34 @@ export default {
         params['search'] = this.search
       }
 
-      Object.keys(this.filters).forEach(
-        (key) => (params[key] = this.filters[key]),
-      )
+      console.log(this.filters.filtersSelected)
 
+      Object.keys(this.filters.filtersSelected).forEach(
+        (key) => (params[key] = this.filters.filtersSelected[key]),
+      )
+      console.log(params)
       return params
     },
     openLocationModal(game) {
       this.selectedGame = game
       this.$bvModal.show('checkin-modal')
+    },
+    updateSelected(game_id) {
+      if (this.selected.includes(game_id)) {
+        this.selected.splice(this.selected.indexOf(game_id))
+      } else {
+        this.selected.push(game_id)
+      }
+    },
+    isGameSelectable(game) {
+      return this.bulk && game.status === 'available'
+    },
+    returnGame(game) {
+      withdrawService.returnGame(game.current_withdraw.id).then(() => {
+        libraryService.fetchGame(game.id).then(() => {
+          this.refreshGames()
+        })
+      })
     },
   },
 

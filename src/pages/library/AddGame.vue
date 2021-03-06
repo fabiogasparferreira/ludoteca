@@ -3,6 +3,7 @@
     :back-to="{ name: 'Home' }"
     pre-title="library"
     title="New game"
+    @submit="onSubmit"
   >
     <template #content>
       <form novalidate @submit.stop.prevent="onSubmit">
@@ -30,7 +31,17 @@
           ></ModalGameSelect>
 
           <!-- details -->
-          <GameCard v-if="!!game.id" :game="game" />
+          <b-card v-if="!!game.id" :game="game">
+            <b-media>
+              <template #aside>
+                <b-avatar :src="game.thumbnail" rounded size="lg"/>
+              </template>
+              <div class="d-flex flex-column">
+              <span>{{game.name}}</span>
+                <metadata-item icon="calendar-fill" :text="game.year"/>
+                </div>
+            </b-media>
+          </b-card>
         </b-form-group>
 
         <!-- Owner -->
@@ -50,8 +61,17 @@
             hidden
           ></b-form-input>
 
-          <PersonCard v-if="!!player.id" :person="player" />
-
+                  <b-card v-if="!!player.id" >
+            <b-media>
+              <template #aside>
+                <b-avatar variant="light" size="lg"/>
+              </template>
+              <div class="d-flex flex-column">
+              <span>{{player.name}}</span>
+                <metadata-item icon="envelope" :text="player.email"/>
+                </div>
+            </b-media>
+          </b-card>
           <!-- Owner modal -->
           <ModalPlayerSelect
             id="player-select-modal"
@@ -65,7 +85,7 @@
           label="Location"
         >
           <b-form-input
-            v-model="selected"
+            v-model="form.location"
             :state="validateState('location')"
             hidden
           />
@@ -105,24 +125,22 @@
 import ModalGameSelect from '@/components/ModalGameSelect'
 import bggService from '@/services/bgg.service'
 import libraryService from '@/services/library.service'
-import PersonCard from '@/components/PersonCard'
 import gamesMixin from '@/mixins/games.mixin'
 import formMixin from '@/mixins/form.mixins'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
-import GameCard from '@/components/cards/GameCard'
 import WizardScreen from '@/components/templates/WizardScreen'
 import FormSelect from '@/components/FormSelect'
 
 import { required } from 'vuelidate/lib/validators'
+import MetadataItem from "@/components/cards/MetadataItem"
 
 export default {
   name: 'AddGame',
   components: {
+    MetadataItem,
     WizardScreen,
     ModalPlayerSelect,
-    PersonCard,
     ModalGameSelect,
-    GameCard,
     FormSelect,
   },
   mixins: [gamesMixin, formMixin],
@@ -176,8 +194,8 @@ export default {
 
       libraryService
         .createGame(this.form)
-        .then(response => {
-          this.$toast.success('Success! Place the game on ' + response.location)
+        .then(() => {
+          this.$toast.success('Saved')
           this.$router.push({ name: 'Home' })
         })
         .catch(response => console.log(response))

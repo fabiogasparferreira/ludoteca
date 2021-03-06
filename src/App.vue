@@ -1,18 +1,18 @@
 <template>
   <div id="app" style="min-height: 100vh">
-    <TopNav></TopNav>
+<!--    <TopNav></TopNav>-->
       <router-view />
   </div>
 </template>
 
 <script>
 import authorizationService from '@/services/authorization.service'
-import TopNav from '@/components/TopNav'
+// import TopNav from '@/components/TopNav'
 
 export default {
   name: 'App',
   components: {
-    TopNav
+    // TopNav
   },
   created() {
     if (authorizationService.isAuthenticated()) {

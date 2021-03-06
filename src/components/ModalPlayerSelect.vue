@@ -95,11 +95,11 @@ export default {
   mixins: [usersMixin, formMixin],
   props: ['id', 'title'],
   components: { ModalSelect },
-  data: function() {
+  data: function () {
     return {
       isNewPlayer: false,
       selectedPlayer: undefined,
-      players: [],
+      players: this.$store.getters['library/players'],
       form: {
         name: '',
         email: '',
@@ -117,7 +117,7 @@ export default {
       this.form.name = val
       playerService
         .searchPlayers(val)
-        .then(response => (this.players = response))
+        .then((response) => (this.players = response))
     },
     onSubmit() {
       this.emailAlreadyRegistered = false
@@ -150,11 +150,11 @@ export default {
 
         playerService
           .createPlayer(player)
-          .then(response => {
+          .then((response) => {
             this.$bvModal.hide(this.id)
             this.$emit('player-selected', response)
           })
-          .catch(response => {
+          .catch((response) => {
             if (response?.response?.data?.email) {
               this.emailAlreadyRegistered = true
             } else {
@@ -167,6 +167,9 @@ export default {
           .finally(() => (this.loading = false))
       }
     },
+  },
+  mounted() {
+    this.players = this.$store.getters['library/players']
   },
   validations: {
     form: {

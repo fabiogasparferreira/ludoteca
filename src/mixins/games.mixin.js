@@ -7,7 +7,7 @@ export default {
       } else {
         msg = min + ' - ' + max
       }
-      return msg + ' min'
+      return msg + ''
     },
     num_players: function(min, max) {
       if (min === max) {

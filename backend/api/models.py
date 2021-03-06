@@ -35,7 +35,12 @@ class Supplier(models.Model):
 
 
 class Location(models.Model):
+    TYPE_ROOM = 'room'
+    TYPE_SHELF = 'shelf'
+    TYPES = [(TYPE_ROOM, 'Room'), (TYPE_SHELF, 'Shelf')]
+
     name = models.CharField(max_length=20, unique=True)
+    type = models.CharField(max_length=32, choices=TYPES, default=TYPE_SHELF)
 
     def __str__(self):
         return self.name
