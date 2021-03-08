@@ -1,7 +1,5 @@
-import time
 
 from django.contrib.auth import get_user_model
-from django.db.models import Count
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from rest_framework import viewsets, permissions, generics
