@@ -149,6 +149,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# This will allow whitenoise to serve SPA files as well
 WHITENOISE_INDEX_FILE = True
 
+# Custom class for user, this allows to customize login and required classes for default authentication user class
 AUTH_USER_MODEL = 'api.User'
