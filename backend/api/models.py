@@ -125,6 +125,7 @@ class StoreGame(models.Model):
     selling_price = models.FloatField(default=0.0, blank=False, null=False)
     selling_price_associate = models.FloatField(default=0.0, blank=False, null=False)
     buying_price = models.FloatField(default=0.0, blank=False, null=False)
+    stock = models.FloatField(default=0.0, blank=False, null=False)
 
 
 class Withdraw(models.Model):

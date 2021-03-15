@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import LibraryGame, BggGame, Withdraw, Badge, Location, Supplier
+from .models import LibraryGame, BggGame, Withdraw, Badge, Location, Supplier, StoreGame
 
 User = get_user_model()
 
@@ -99,6 +99,37 @@ class LibraryGameSerializer(serializers.ModelSerializer):
         )
 
 
+class StoreGameSerializer(serializers.ModelSerializer):
+    supplier = SupplierSerializer(read_only=True)
+    game = BggGameSerializer(read_only=True)
+
+    game_id = serializers.IntegerField(write_only=True, required=True)
+    supplier_id = serializers.PrimaryKeyRelatedField(
+        queryset=Supplier.objects.all(),
+        source="supplier",
+        required=True,
+        write_only=True
+    )
+
+    class Meta:
+        model = StoreGame
+        fields = (
+            'id',
+            'game',
+            'game_id',
+            'supplier',
+            'supplier_id',
+            'selling_price',
+            'selling_price_associate',
+            'buying_price',
+            'stock'
+        )
+        extra_kwargs = {
+            'selling_price': {'required': True},
+            'stock': {'required': True},
+        }
+
+
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
 
@@ -127,7 +158,3 @@ class WithdrawSerializer(serializers.ModelSerializer):
         fields = ('id', 'requisitor', 'requisitor_id', 'game', 'game_id', 'date_withdrawn', 'date_returned')
 
 
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = '__all__'
