@@ -47,7 +47,7 @@
 <script>
 import usersMixin from '@/mixins/users.mixin'
 import authorizationService from '@/services/authorization.service'
-//import UserInfo from "@/components/UserInfo";
+//import UserInfo from "@/partials/UserInfo";
 
 export default {
   name: 'TopNav',

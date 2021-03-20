@@ -4,13 +4,13 @@ import StoreHome from '@/pages/store/Home'
 import LibraryHome from '@/pages/library/home/Home'
 import Login from './pages/Login'
 
+import HomeTemplate from '@/pages/templates/HomeTemplate'
 import WithdrawGame from '@/pages/library/WithdrawGame'
 import AddGame from '@/pages/library/AddGame'
 import LibraryDashboard from '@/pages/library/Dashboard'
 
 import authorizationService from '@/services/authorization.service'
 import PageNotFound from '@/pages/PageNotFound'
-import Configurations from "@/pages/admin/Configurations"
 
 Vue.use(VueRouter)
 
@@ -49,6 +49,7 @@ const routes = [
     beforeEnter: guardAuthenticated,
     component: WithdrawGame,
   },
+
   {
     path: '/library/new',
     name: 'AddLibraryGame',
