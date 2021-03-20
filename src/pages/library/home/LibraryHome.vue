@@ -306,7 +306,7 @@ export default {
   data() {
     return {
       search: '',
-      games: new Array(50).fill({
+      games: new Array(60).fill({
         game: { name: '', image: '' },
         owner: { name: '' },
         id: 0

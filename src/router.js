@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import StoreHome from '@/pages/store/Home'
-import LibraryHome from '@/pages/library/home/Home'
+import StoreHome from '@/pages/store/home/StoreHome'
+import LibraryHome from '@/pages/library/home/LibraryHome'
 import Login from './pages/Login'
 
 import HomeTemplate from '@/pages/templates/HomeTemplate'
@@ -50,6 +50,7 @@ const routes = [
         path: '/store/',
         name: 'StoreHome',
         component: StoreHome,
+        props: { title: 'Store', pretitle: 'leiriacon 2022' },
       },
     ],
   },

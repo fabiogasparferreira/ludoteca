@@ -17,7 +17,7 @@ $breakpoint argument choices:
 - tab-land
 - big-desktop
 
-ORDER: Base + typography > general layout + grid > page layout > components
+ORDER: Base + typography > general layout + grid > page layout > partials
 */
 @media (max-width: 62.5em) {
   html {
