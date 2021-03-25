@@ -70,7 +70,6 @@ class Command(BaseCommand):
         skipped = []
         df = pd.read_json('backend/api_bgggame.json')
         for _, row in df.iterrows():
-            utils.BGGGame.create()
             bgggame = BggGame()
             bgggame.bggid = row['bggid']
             bgggame.name = row['name']
