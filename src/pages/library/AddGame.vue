@@ -128,7 +128,7 @@ import libraryService from '@/services/library.service'
 import gamesMixin from '@/mixins/games.mixin'
 import formMixin from '@/mixins/form.mixins'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
-import WizardScreen from '@/components/templates/WizardScreen'
+import WizardScreen from '@/components/templates/InputScreenTemplate'
 import FormSelect from '@/components/FormSelect'
 
 import { required } from 'vuelidate/lib/validators'

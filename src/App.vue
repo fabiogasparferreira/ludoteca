@@ -19,6 +19,7 @@ export default {
       this.$store.dispatch('users/loadCurrent')
       this.$store.dispatch('library/loadLocations')
       this.$store.dispatch('library/loadPlayers')
+      this.$store.dispatch('configurations/load')
     }
   },
 }

@@ -21,6 +21,7 @@ router.register(r'store/suppliers', views.SupplierViewSet)
 router.register(r'store/games', views.StoreGameViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'players', views.PlayerViewSet)
+router.register(r'configurations', views.ConfigurationViewSet)
 
 urlpatterns = [
     path('', index_view, name='index'),

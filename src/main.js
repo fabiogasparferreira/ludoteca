@@ -1,22 +1,16 @@
 import Vue from 'vue'
 import App from '@/App.vue'
 
-// -----------------------------------------------------------
-// Vuex
-// -----------------------------------------------------------
 
+// Vuex
 import store from '@/store'
 
-// -----------------------------------------------------------
-// Vue-router
-// -----------------------------------------------------------
 
+// Vue-router
 import router from '@/router'
 
-// -----------------------------------------------------------
-// Vue toastification
-// -----------------------------------------------------------
 
+// Vue toastification
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
@@ -30,10 +24,9 @@ Vue.use(Toast, {
   closeButton: 'button',
 })
 
-// -----------------------------------------------------------
-// Vue Bootstrap
-// -----------------------------------------------------------
 
+
+// Vue Bootstrap
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -41,25 +34,19 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
-// -----------------------------------------------------------
-// Theme and custom styles
-// -----------------------------------------------------------
 
-import '../public/theme/css/theme.min.css'
+// Theme and custom styles
+import '../public/theme/scss/theme.scss'
 import '../public/static/main.scss'
 import '../public/theme/fonts/feather/feather.css'
 
-// -----------------------------------------------------------
-// Vuelidate
-// -----------------------------------------------------------
 
+// Vuelidate
 import { Vuelidate } from 'vuelidate'
 Vue.use(Vuelidate)
 
-// -----------------------------------------------------------
-// Other configurations
-// -----------------------------------------------------------
 
+// Other configurations
 Vue.config.productionTip = false
 
 const vue = new Vue({

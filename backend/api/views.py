@@ -10,9 +10,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt import authentication
 
 from backend.api.filters import LibraryGameFilter
-from backend.api.models import LibraryGame, Withdraw, Location, Supplier, BggGame, StoreGame
-from backend.api.serializers import LibraryGameSerializer, UserSerializer, PlayerSerializer, WithdrawSerializer, \
-    LocationSerializer, SupplierSerializer, BggGameSerializer, StoreGameSerializer
+from backend.api.models import *
+from backend.api.serializers import *
 from backend.api import utils
 
 User = get_user_model()
@@ -123,3 +122,10 @@ class StatisticsViewSet(APIView):
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.order_by('name').all()
     serializer_class = LocationSerializer
+
+
+class ConfigurationViewSet(viewsets.ModelViewSet):
+    queryset = Configuration.objects.all()
+    serializer_class = ConfigurationSerializer
+    authentication_classes = [authentication.JWTAuthentication]
+    permission_classes = (permissions.IsAdminUser,)

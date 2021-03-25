@@ -6,6 +6,7 @@ import users from '@/store/modules/users'
 import router from '@/router'
 import authorizationService from '@/services/authorization.service'
 import localStorageService from '@/services/localStorage.service'
+import configurations from "@/store/modules/configurations"
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     messages,
     library,
     users,
+    configurations,
   },
   actions: {
     /**

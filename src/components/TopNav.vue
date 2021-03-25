@@ -32,7 +32,8 @@
               right
               toggle-class="pl-0"
           >
-            <b-dropdown-item>Profile</b-dropdown-item>
+            <b-dropdown-item :to="{name: 'Configurations'}">Configurations</b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item-button @click="logout"
             >Logout
             </b-dropdown-item-button

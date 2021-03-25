@@ -1,9 +1,9 @@
 <template>
   <div>
     <TopNav></TopNav>
-    <div class="container">
+    <b-container fluid="sm">
       <router-view />
-    </div>
+    </b-container>
   </div>
 </template>
 

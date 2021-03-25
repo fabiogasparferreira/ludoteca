@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <HomeScreenTemplate>
     <Header :pretitle="pretitle" :title="title">
       <template v-slot:content-right>
         <div v-if="isAuthenticated()">
@@ -66,7 +66,7 @@
 
     <!-- Content -->
     <div class="mt-5">
-      <b-row class="">
+      <b-row>
         <!-- Games list -->
         <b-col
           v-for="(game, index) in games"
@@ -280,7 +280,7 @@
     </div>
 
     <ModalPlayerSelect id="filter-players-modal"></ModalPlayerSelect>
-  </b-container>
+  </HomeScreenTemplate>
 </template>
 
 <script>
@@ -299,6 +299,7 @@ import Filters from '@/components/Filters'
 import FiltersButton from '@/components/FiltersButton'
 import FilterSelect from '@/components/FilterSelect'
 import withdrawService from "@/services/withdraw.service"
+import HomeScreenTemplate from "@/components/templates/HomeScreenTemplate"
 
 export default {
   name: 'Home',
@@ -332,6 +333,7 @@ export default {
     }
   },
   components: {
+    HomeScreenTemplate,
     FiltersButton,
     Pagination,
     CheckinModal,

@@ -5,8 +5,7 @@
         <b-card-img src="./static/blank_box.jpg" style="height: 8rem" />
         <b-card-body>
           <b-skeleton width="50%" />
-          <b-skeleton class="mt-2" width="40%" />
-          <b-skeleton class="mt-2" width="30%" />
+          <b-skeleton class="mt-3" width="30%" />
           <b-skeleton class="mt-2" width="30%" />
         </b-card-body>
         <b-card-footer v-if="!noFooter">
@@ -42,7 +41,7 @@
       </div>
       <b-card-body>
         <span
-          class="text-nowrap font-size-lg d-block overflow-hidden text-truncate"
+          class="font-size text-nowrap overflow-hidden d-block"
           v-show="title"
           >{{ title }}</span
         >
@@ -50,7 +49,7 @@
         <div>
           <slot name="badges"></slot>
         </div>
-        <div class="mt-2">
+        <div class="mt-3">
           <slot name="metadata"></slot>
         </div>
       </b-card-body>

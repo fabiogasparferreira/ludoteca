@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Count
 from django.dispatch import receiver
@@ -123,7 +124,6 @@ class StoreGame(models.Model):
     game = models.ForeignKey(BggGame, null=True, blank=True, on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier, null=True, blank=True, on_delete=models.CASCADE)
     selling_price = models.FloatField(default=0.0, blank=False, null=False)
-    selling_price_associate = models.FloatField(default=0.0, blank=False, null=False)
     buying_price = models.FloatField(default=0.0, blank=False, null=False)
     stock = models.FloatField(default=0.0, blank=False, null=False)
 
@@ -164,6 +164,16 @@ class Withdraw(models.Model):
 
         items.sort(key=lambda o: o['date_withdrawn'])
         return items
+
+
+class Configuration(models.Model):
+    class Types(models.TextChoices):
+        STORE = 'store', 'Store'
+        LIBRARY = 'library', 'Library'
+
+    key = models.fields.CharField(unique=True, max_length=100)
+    type = models.TextField(choices=Types.choices)
+    value = models.TextField()
 
 
 @receiver(reset_password_token_created)

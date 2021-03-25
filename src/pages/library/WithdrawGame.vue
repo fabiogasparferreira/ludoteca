@@ -48,7 +48,7 @@ import axiosMixin from '@/mixins/axios.mixin'
 import withdrawService from '@/services/withdraw.service'
 import libraryService from '@/services/library.service'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
-import WizardScreen from '@/components/templates/WizardScreen'
+import WizardScreen from '@/components/templates/InputScreenTemplate'
 import LocationShelves from '@/components/location/LocationShelves'
 
 import formMixin from '@/mixins/form.mixins'
