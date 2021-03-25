@@ -10,7 +10,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from backend.api import utils
-from backend.api.models import BggGame, LibraryGame, Location, Withdraw
+from backend.api.models import BggGame, LibraryGame, Location, Withdraw, Configuration
 
 User = get_user_model()
 
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         # create locations
         # TODO: Move this to a config file
 
-        print('[1/4] Create locations')
+        print('[1/5] Create locations')
         locations = [
             'A1', 'A2', 'A3', 'A4', 'A5',
             'B1', 'B2', 'B3', 'B4', 'B5',
@@ -50,7 +50,7 @@ class Command(BaseCommand):
             location_object.save()
 
         # create players
-        print('[2/4] Create users')
+        print('[2/5] Create users')
         # TODO: Move this to a config file
         reader = pd.read_csv('https://my.api.mockaroo.com/players.json?key=5dec1ef0', header=0, delimiter=',')
 
@@ -65,7 +65,7 @@ class Command(BaseCommand):
             user.save()
 
 
-        print('[3/4] Create library games')
+        print('[3/5] Create library games')
         # load library from file
         skipped = []
         df = pd.read_json('backend/api_bgggame.json')
@@ -98,7 +98,7 @@ class Command(BaseCommand):
             else:
                 print('game without id')
 
-        print('[4/4] Set library games location and randomize status')
+        print('[4/5] Set library games location and randomize status')
         shelves = Location.objects.all()
 
         statuses = ['not-checkedin', 'available', 'not-available', 'checkedout']
@@ -137,4 +137,16 @@ class Command(BaseCommand):
                 game.date_checkout = timezone.now()
 
             game.save()
+
+        print('[5/5] Create default configurations')
+        conf = Configuration()
+        conf.key = 'convention_user'
+        conf.type = Configuration.Types.LIBRARY
+        conf.save()
+        conf = Configuration()
+        conf.key = 'associate_discount'
+        conf.type = Configuration.Types.STORE
+        conf.value = '0'
+        conf.save()
+
         print('Exiting...')

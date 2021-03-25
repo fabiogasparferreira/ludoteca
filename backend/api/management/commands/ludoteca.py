@@ -1,3 +1,5 @@
+from _ast import keyword
+
 import pandas as pd
 from boardgamegeek import BGGClient
 from django.contrib.auth import get_user_model
@@ -5,7 +7,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from backend.api import utils
-from backend.api.models import Location
+from backend.api.models import Location, Configuration
 
 User = get_user_model()
 
@@ -29,7 +31,7 @@ class Command(BaseCommand):
         # create locations
         # TODO: Move this to a config file
 
-        print('1. Create locations')
+        print('[1/3] Create locations')
         locations = [
             'A1', 'A2', 'A3', 'A4', 'A5',
             'B1', 'B2', 'B3', 'B4', 'B5',
@@ -44,9 +46,7 @@ class Command(BaseCommand):
             location_object.name = location
             location_object.save()
 
-        print('Done')
-
-        print('2. Create library games')
+        print('[2/3] Create library games')
         # load library from file
         skipped = []
         self.stdout.write(options['file'])
@@ -64,4 +64,13 @@ class Command(BaseCommand):
             else:
                 print('game without id')
 
-        print('Done, games skipped: ' + str(skipped))
+        print('[3/3] Create default configurations')
+        conf = Configuration()
+        conf.key = 'convention_user'
+        conf.type = Configuration.Types.LIBRARY
+        conf.save()
+        conf = Configuration()
+        conf.key = 'associate_discount'
+        conf.type = Configuration.Types.STORE
+        conf.value = '0'
+        conf.save()
