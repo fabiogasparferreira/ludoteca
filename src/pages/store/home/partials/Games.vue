@@ -12,7 +12,7 @@
 import Game from './Game'
 
 export default {
-  name: 'GameList',
+  name: 'Games',
   components: {
     Game,
   },

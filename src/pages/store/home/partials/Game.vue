@@ -18,7 +18,7 @@
           class="img-cover"
           blank-src="/static/blank_box.jpg"
           blank-height="10rem"
-          style="height: 10rem"
+          style="height: 10rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0"
         />
         <div
           v-if="selectable"
@@ -56,10 +56,9 @@
           </b-col>
           <b-col>
             <div class="d-flex flex-row align-content-center align-items-center">
-              <b-img src="/static/leiriacon.png" height="14rem" />
-              <span class="ml-2 font-weight-lighter"
-                >{{ (game.selling_price * 0.9).toFixed(2) }}€</span
-              >
+              <b-icon-award-fill class="text-muted"/>
+              <h3 class="ml-2 font-weight-lighter mb-0"
+                >{{ (game.selling_price * 0.9).toFixed(2) }}€</h3>
             </div>
           </b-col>
         </b-row>

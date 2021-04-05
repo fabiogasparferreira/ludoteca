@@ -22,11 +22,11 @@
     <b-card no-body>
       <div class="position-relative">
         <b-card-img-lazy
-          v-if="!noImage"
-          :src="image"
+          :src="game.game.image"
           blank-src="./static/blank_box.jpg"
           blank-height="8rem"
-          style="object-fit: cover; height: 8rem"
+          class="img-cover"
+          style="height: 8rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0"
         />
         <div
           v-if="selectable"
@@ -42,10 +42,9 @@
       </div>
       <b-card-body>
         <span
-          class="font-size text-nowrap overflow-hidden d-block"
-          v-show="title"
-          >{{ title }}</span
-        >
+          class="font-size text-nowrap overflow-hidden d-block">
+          {{ game.game.name }}
+        </span>
 
         <div>
           <slot name="badges"></slot>
@@ -71,7 +70,7 @@
           </div>
         </div>
       </b-card-body>
-      <b-card-footer v-if="!noFooter">
+      <b-card-footer v-show="$store.getters['users/current'].is_staff">
         <slot name="footer">
           <div
             class="d-flex flex-row align-items-center justify-content-between"
@@ -82,7 +81,71 @@
             <span v-if="game.status === 'available'" class="text-success"
               >Available</span
             >
-            <slot name="actions"></slot>
+              <div v-if="game.status === 'available'">
+                <b-link
+                  class="d-inline d-md-none"
+                  v-b-tooltip.hover
+                  title="Withdraw"
+                  :to="{ name: 'WithdrawGame', params: { id: game.id } }"
+                >
+                  <b-icon-arrow-up-circle
+                    font-scale="1.5"
+                    class="text-gray-700"
+                  />
+                </b-link>
+
+                <b-button class="d-none d-md-inline" variant="light" size="sm" :to="{ name: 'WithdrawGame', params: { id: game.id } }">
+                  WITHDRAW
+                </b-button>
+              </div>
+
+              <div v-if="game.status === 'not-checked-in'">
+                <b-link
+                  class="d-inline d-md-none"
+                  v-b-modal.checkin-modal
+                  v-b-tooltip.hover
+                  title="Check-in"
+                  @click="$emit('check-in', game)"
+                >
+                  <b-icon-patch-plus-fill
+                    font-scale="1.5"
+                    class="text-gray-700"
+                  />
+                </b-link>
+                <b-button
+                  class="d-none d-md-inline"
+                  variant="light"
+                  size="sm"
+                  @click="$emit('check-in', game)"
+                >
+                  CHECK-IN
+                </b-button>
+              </div>
+
+              <div v-if="game.status === 'not-available'">
+                <!-- Small width button -->
+                <b-link
+                  class="d-inline d-md-none"
+                  v-b-tooltip.hover
+                  title="Return"
+                  @click="returnGame(game)"
+                >
+                  <b-icon-arrow-down-circle-fill
+                    font-scale="1.5"
+                    class="text-gray-700"
+                  />
+                </b-link>
+
+                <!-- Medium width + button -->
+                <b-button
+                  class="d-none d-md-inline"
+                  variant="light"
+                  size="sm"
+                  @click="returnGame(game)"
+                >
+                  RETURN
+                </b-button>
+              </div>
           </div>
         </slot>
       </b-card-footer>
@@ -93,6 +156,8 @@
 <script>
 import gamesMixin from '@/mixins/games.mixin'
 import MetadataItem from '@/components/cards/MetadataItem'
+import withdrawService from "@/services/withdraw.service"
+import libraryService from "@/services/library.service"
 
 export default {
   name: 'LibraryHomeGameCard',
@@ -120,10 +185,6 @@ export default {
       default: false,
       type: Boolean,
     },
-    game_id: {
-      required: true,
-      type: Number,
-    },
     title: {
       default: '',
       type: String,
@@ -149,6 +210,7 @@ export default {
       type: Boolean,
     },
   },
+    mixins: [gamesMixin],
   components: {
     MetadataItem,
   },
@@ -159,11 +221,20 @@ export default {
       },
       // eslint-disable-next-line no-unused-vars
       set(val) {
-        this.$emit('selected-change', this.game_id)
+        this.$emit('selected-change', this.game.id)
       },
     },
   },
-  mixins: [gamesMixin],
+  methods: {
+    returnGame(game) {
+      withdrawService.returnGame(game.current_withdraw.id).then(() => {
+        libraryService.fetchGame(game.id).then(() => {
+          this.$emit('return')
+        })
+      })
+    },
+  },
+
 }
 </script>
 

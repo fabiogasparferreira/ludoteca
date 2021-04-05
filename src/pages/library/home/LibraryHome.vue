@@ -74,92 +74,14 @@
           xl="3"
         >
           <Game
-            :game_id="game.id"
+              :game="game"
             :loading="loading"
-            :image="game.game.image"
-            :title="game.game.name"
-            :no-footer="!$store.getters['users/current'].is_staff"
             :selectable="isGameSelectable(game)"
             :selected="selected.includes(game.id)"
             @selected-change="updateSelected"
+              @check-in="openLocationModal"
+              @return="refreshGames"
           >
-
-            <template #status>
-              <span v-if="game.status === 'not-available'" class="text-warning"
-                >{{ game.current_withdraw.requisitor.name }}
-              </span>
-              <span v-if="game.status === 'available'" class="text-success"
-                >Available</span
-              >
-            </template>
-
-            <template #actions>
-              <div v-if="game.status === 'available'">
-                <b-link
-                  class="d-inline d-md-none"
-                  v-b-tooltip.hover
-                  title="Withdraw"
-                  :to="{ name: 'WithdrawGame', params: { id: game.id } }"
-                >
-                  <b-icon-arrow-up-circle
-                    font-scale="1.5"
-                    class="text-gray-700"
-                  />
-                </b-link>
-
-                <b-button class="d-none d-md-inline" variant="light" size="sm" :to="{ name: 'WithdrawGame', params: { id: game.id } }">
-                  WITHDRAW
-                </b-button>
-              </div>
-
-              <div v-if="game.status === 'not-checked-in'">
-                <b-link
-                  class="d-inline d-md-none"
-                  v-b-modal.checkin-modal
-                  v-b-tooltip.hover
-                  title="Checkin"
-                  @click="openLocationModal(game)"
-                >
-                  <b-icon-patch-plus-fill
-                    font-scale="1.5"
-                    class="text-gray-700"
-                  />
-                </b-link>
-                              <b-button
-                  class="d-none d-md-inline"
-                  variant="light"
-                  size="sm"
-                  @click="openLocationModal(game)"
-                >
-                  CHECK-IN
-                </b-button>
-              </div>
-
-              <div v-if="game.status === 'not-available'">
-                <!-- Small width button -->
-                <b-link
-                  class="d-inline d-md-none"
-                  v-b-tooltip.hover
-                  title="Return"
-                  @click="returnGame(game)"
-                >
-                  <b-icon-arrow-down-circle-fill
-                    font-scale="1.5"
-                    class="text-gray-700"
-                  />
-                </b-link>
-
-                <!-- Medium width + button -->
-                <b-button
-                  class="d-none d-md-inline"
-                  variant="light"
-                  size="sm"
-                  @click="returnGame(game)"
-                >
-                  RETURN
-                </b-button>
-              </div>
-            </template>
           </Game>
         </b-col>
       </b-row>
@@ -269,7 +191,6 @@ import Pagination from '@/components/Pagination'
 import Filters from '@/components/Filters'
 import FiltersButton from '@/components/FiltersButton'
 import FilterSelect from '@/components/FilterSelect'
-import withdrawService from "@/services/withdraw.service"
 import HomeScreenTemplate from "@/components/templates/HomeScreenTemplate"
 import Game from "./partials/Game"
 
@@ -402,12 +323,10 @@ export default {
         params['search'] = this.search
       }
 
-      console.log(this.filters.filtersSelected)
-
       Object.keys(this.filters.filtersSelected).forEach(
         (key) => (params[key] = this.filters.filtersSelected[key]),
       )
-      console.log(params)
+
       return params
     },
     openLocationModal(game) {
@@ -423,13 +342,6 @@ export default {
     },
     isGameSelectable(game) {
       return this.bulk && game.status === 'available'
-    },
-    returnGame(game) {
-      withdrawService.returnGame(game.current_withdraw.id).then(() => {
-        libraryService.fetchGame(game.id).then(() => {
-          this.refreshGames()
-        })
-      })
     },
   },
 

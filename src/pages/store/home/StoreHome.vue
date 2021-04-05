@@ -1,11 +1,13 @@
 <template>
   <HomeScreenTemplate :title="title" :pre-title="pretitle">
-    <GameList :loading="loading" :games="games"/>
+    <template #actions><b-button variant="primary">Add game</b-button></template>
+    <Games :loading="loading" :games="games"/>
+
   </HomeScreenTemplate>
 </template>
 
 <script>
-import GameList from "@/pages/store/home/partials/GameList"
+import Games from "@/pages/store/home/partials/Games"
 import HomeScreenTemplate from "@/components/templates/HomeScreenTemplate"
 import storeService from "@/services/store.service"
 
@@ -13,7 +15,7 @@ export default {
   name: 'StoreHome',
   components: {
     HomeScreenTemplate,
-    GameList,
+    Games,
   },
   props: ['title', 'pretitle'],
   data() {
