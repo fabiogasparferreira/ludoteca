@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="header-body">
+    <div class="header-body pt-5">
       <div class="row align-items-center">
         <b-col class="d-flex flex-column">
           <h6 class="header-pretitle">

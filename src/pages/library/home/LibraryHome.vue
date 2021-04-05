@@ -1,8 +1,7 @@
 <template>
-  <HomeScreenTemplate>
-    <Header :pretitle="pretitle" :title="title">
-      <template v-slot:content-right>
-        <div v-if="isAuthenticated()">
+  <HomeScreenTemplate :title="title" :pre-title="pretitle">
+    <template #actions>
+      <div v-if="isAuthenticated()">
           <b-dropdown class="mr-3" no-caret variant="white">
             <template #button-content>
               <b-icon-gear />
@@ -20,8 +19,7 @@
             Add game
           </b-button>
         </div>
-      </template>
-    </Header>
+    </template>
 
     <!-- Search and filters trigger -->
     <b-row class="align-items-center mb-3">
@@ -75,7 +73,7 @@
           md="4"
           xl="3"
         >
-          <GameCard
+          <Game
             :game_id="game.id"
             :loading="loading"
             :image="game.game.image"
@@ -85,30 +83,6 @@
             :selected="selected.includes(game.id)"
             @selected-change="updateSelected"
           >
-            <template #metadata>
-              <div v-if="$store.getters['users/current'].is_staff">
-                <metadata-item :text="game.owner.name" icon="briefcase-fill" />
-                <metadata-item
-                  :text="game.location ? game.location.name : 'Not available'"
-                  icon="geo-fill"
-                />
-              </div>
-
-              <div v-else class="flex flex-column">
-                <metadata-item
-                  :text="
-                    num_players(game.game.min_players, game.game.max_players)
-                  "
-                  icon="person-fill"
-                />
-                <metadata-item
-                  :text="
-                    playtime(game.game.min_playtime, game.game.max_playtime)
-                  "
-                  icon="clock-fill"
-                />
-              </div>
-            </template>
 
             <template #status>
               <span v-if="game.status === 'not-available'" class="text-warning"
@@ -186,7 +160,7 @@
                 </b-button>
               </div>
             </template>
-          </GameCard>
+          </Game>
         </b-col>
       </b-row>
 
@@ -286,9 +260,6 @@
 <script>
 import gamesMixin from '@/mixins/games.mixin'
 import libraryService from '@/services/library.service'
-import Header from '@/components/Header'
-import GameCard from '@/components/cards/GameCard'
-import MetadataItem from '@/components/cards/MetadataItem'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
 import playerService from '@/services/player.service'
 import CheckinModal from '@/components/CheckinModal'
@@ -300,6 +271,7 @@ import FiltersButton from '@/components/FiltersButton'
 import FilterSelect from '@/components/FilterSelect'
 import withdrawService from "@/services/withdraw.service"
 import HomeScreenTemplate from "@/components/templates/HomeScreenTemplate"
+import Game from "./partials/Game"
 
 export default {
   name: 'Home',
@@ -338,14 +310,12 @@ export default {
     Pagination,
     CheckinModal,
     ModalPlayerSelect,
-    MetadataItem,
-    GameCard,
-    Header,
+    Game,
     Filters,
     FilterSelect,
   },
   mixins: [gamesMixin, usersMixin],
-  mounted() {
+  created() {
     this.refreshGames()
   },
   methods: {

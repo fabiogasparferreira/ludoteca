@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import StoreHome from '@/pages/store/Home'
-import LibraryHome from '@/pages/library/home/Home'
 import Login from './pages/Login'
 
-import HomeTemplate from '@/pages/templates/HomeTemplate'
 import WithdrawGame from '@/pages/library/WithdrawGame'
 import AddGame from '@/pages/library/AddGame'
 import LibraryDashboard from '@/pages/library/Dashboard'
+import Configurations from "@/pages/admin/Configurations"
 
 import authorizationService from '@/services/authorization.service'
 import PageNotFound from '@/pages/PageNotFound'
+import LibraryHome from "@/pages/library/home/LibraryHome"
+import StoreHome from "@/pages/store/home/StoreHome"
 
 Vue.use(VueRouter)
 
@@ -59,6 +59,7 @@ const routes = [
   {
     path: '/store',
     name: 'StoreHome',
+    props: { title: 'Store', pretitle: 'Leiriacon' },
     component: StoreHome,
   },
 

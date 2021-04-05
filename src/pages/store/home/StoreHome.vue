@@ -1,32 +1,33 @@
 <template>
-  <b-container>
-    <Header
-      :pretitle="pretitle"
-      :title="title"
-      :bulk="bulk"
-      @bulk-change="bulk = $event"
-    />
-
-    <GameList />
-  </b-container>
+  <HomeScreenTemplate :title="title" :pre-title="pretitle">
+    <GameList :loading="loading" :games="games"/>
+  </HomeScreenTemplate>
 </template>
 
 <script>
-import Header from './partials/Header'
 import GameList from "@/pages/store/home/partials/GameList"
+import HomeScreenTemplate from "@/components/templates/HomeScreenTemplate"
+import storeService from "@/services/store.service"
 
 export default {
   name: 'StoreHome',
   components: {
+    HomeScreenTemplate,
     GameList,
-    Header,
   },
   props: ['title', 'pretitle'],
   data() {
     return {
-      bulk: false,
+      games: [],
+      loading: true
     }
   },
+  mounted(){
+    storeService.fetchGames(1).then(response => {
+      this.games = response.results
+      this.loading = false
+    })
+  }
 }
 </script>
 
