@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <b-container class="sticky sticky-top">
+  <div class="min-vh-100">
+    <b-container>
       <b-row class="justify-content-center">
         <b-col lg="10" md="10" sm="12" xl="8">
-          <div class="header mt-3 mt-md-5 mb-0">
+          <div class="header mt-3 mt-md-5">
             <div class="header-body">
               <b-row class="align-items-center">
                 <b-col cols="auto">
@@ -11,7 +11,6 @@
                     <span class="fe fe-arrow-left"></span></b-button
                 ></b-col>
                 <b-col>
-                  <h6 class="header-pretitle">{{preTitle}}</h6>
                   <h1 class="header-title">
                     {{ title }}
                   </h1>
@@ -22,7 +21,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container class="pt-0 pt-sm-5">
+    <b-container class="pt-5">
       <b-row class="justify-content-center">
         <b-col lg="10" md="10" sm="12" xl="8">
           <slot> </slot>
@@ -32,32 +31,32 @@
     <b-container class="mt-5 mt-md-6">
       <b-row class="justify-content-center">
         <b-col lg="10" md="10" sm="12" xl="8">
+          <form novalidate @submit.stop.prevent="onSubmit">
           <slot name="content"></slot>
-          <b-row class="mb-3 mt-5">
-            <b-col>
-              <hr />
-            </b-col>
-            <b-col cols="12" md="auto">
+                </form>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container class="fixed-bottom position-fixed py-5">
+      <b-row class="justify-content-center">
+        <b-col lg="10" md="10" sm="12" xl="8">
+            <div class="d-flex flex-row">
               <b-button
-                variant="link"
+                variant="secondary"
                 size="lg"
-                block
-                class="text-muted"
                 :to="{ name: 'LibraryHome' }"
                 >Cancel</b-button
               >
-            </b-col>
-            <b-col cols="12" md="auto">
               <b-button
                 variant="primary"
                 size="lg"
+                class="ml-5"
                 block
-                v-on:click="$emit('submit')"
+                v-on:click="onSubmit()"
               >
                 Finish
               </b-button>
-            </b-col>
-          </b-row>
+              </div>
         </b-col>
       </b-row>
     </b-container>
@@ -76,13 +75,11 @@ export default {
       type: Object,
     },
   },
-  data() {
-    return {
-      items: ['Item 1', 'Item 2', 'Item 3'],
-      // there will be a selected item
-      selected: null,
+  methods:{
+    onSubmit(){
+      this.$emit('submit')
     }
-  },
+  }
 }
 </script>
 

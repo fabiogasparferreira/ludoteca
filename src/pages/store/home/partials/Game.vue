@@ -12,27 +12,16 @@
     </template>
 
     <b-card no-body>
-      <div class="position-relative">
+
         <b-card-img-lazy
           :src="game.game.image"
           class="img-cover"
           blank-src="/static/blank_box.jpg"
           blank-height="10rem"
           style="height: 10rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0"
-        />
-        <div
-          v-if="selectable"
-          class="position-absolute"
-          style="
-            top: 0;
-            border-radius: 5px 0 5px 0;
-            background-color: rgba(1, 1, 1, 0.5);
-          "
-        >
-          <b-checkbox v-model="gameSelected" class="ml-3 mr-1 my-2" size="lg" />
-        </div>
-      </div>
-      <b-card-body>
+               />
+
+  <b-card-body>
         <span class="text-nowrap overflow-hidden d-block">
           {{ game.game.name }}</span
         >
@@ -49,22 +38,21 @@
         <b-row class="mt-4 no-gutters">
           <b-col>
             <div class="">
-              <h3 class="font-weight-lighter text-gray-900 mb-0">
-                {{ game.selling_price }}€
+              <h3 class="text-gray-900 mb-0" style="font-weight: 300">
+                {{ game.selling_price }} €
               </h3>
             </div>
           </b-col>
           <b-col>
             <div class="d-flex flex-row align-content-center align-items-center">
               <b-icon-award-fill class="text-muted"/>
-              <h3 class="ml-2 font-weight-lighter mb-0"
-                >{{ (game.selling_price * 0.9).toFixed(2) }}€</h3>
+              <h3 class="ml-2 mb-0 text-muted" style="font-weight: 300"
+                >{{ (game.selling_price * 0.9).toFixed(2) }} €</h3>
             </div>
           </b-col>
         </b-row>
+    </b-card-body>
 
-
-      </b-card-body>
     </b-card>
   </b-skeleton-wrapper>
 </template>

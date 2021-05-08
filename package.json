@@ -18,6 +18,7 @@
     "js-cookie": "^2.x",
     "node-sass": "^5.0.0",
     "vue": "^2.x",
+    "vue-currency-input": "^1.22.6",
     "vue-router": "^3.x",
     "vue-toastification": "^1.x",
     "vuelidate": "^0.x",

@@ -39,18 +39,18 @@ ORDER: Base + typography > general layout + grid > page layout > partials
 }
 
 html {
-  @include respond(tab-land) {
+  //@include respond(tab-land) {
     // width < 1200?
-    font-size: 87.5%; //1 rem = 10px 10px/16px = 56.25%
-  }
+    //font-size: 100%; //1 rem = 10px 10px/16px = 56.25%
+  //}
   //@include respond(tab-port) {
   //  // width < 900?
-  //  font-size: 87.5%; //1 rem = 8px 8px/16px = 50%
+  //  font-size: 100%; //1 rem = 8px 8px/16px = 50%
   //}
-  @include respond(big-desktop) {
-    // width > 1200?
-    font-size: 100%; //1 rem = 14px 14px/16px = 75%
-  }
+  //@include respond(big-desktop) {
+  //  // width > 1200?
+  //  font-size: 100%; //1 rem = 14px 14px/16px = 75%
+  //}
 }
 
 .img-cover{

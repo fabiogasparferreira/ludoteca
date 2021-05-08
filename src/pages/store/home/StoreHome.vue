@@ -1,6 +1,6 @@
 <template>
   <HomeScreenTemplate :title="title" :pre-title="pretitle">
-    <template #actions><b-button variant="primary">Add game</b-button></template>
+    <template #actions><b-button variant="primary" :to="{name: 'StoreAddGame'}">Add game</b-button></template>
     <Games :loading="loading" :games="games"/>
 
   </HomeScreenTemplate>
