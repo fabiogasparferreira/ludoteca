@@ -6,7 +6,7 @@
     @submit="onSubmit"
   >
     <template #content>
-      <form novalidate @submit.stop.prevent="onSubmit">
+
         <!-- Game -->
         <b-form-group invalid-feedback="This field is required" label="Game">
           <div
@@ -116,7 +116,6 @@
 <!--          >-->
 <!--          <b-button size="lg" type="submit" variant="primary">Create</b-button>-->
         </div>
-      </form>
     </template>
   </WizardScreen>
 </template>
@@ -128,7 +127,7 @@ import libraryService from '@/services/library.service'
 import gamesMixin from '@/mixins/games.mixin'
 import formMixin from '@/mixins/form.mixins'
 import ModalPlayerSelect from '@/components/ModalPlayerSelect'
-import WizardScreen from '@/components/templates/InputScreenTemplate'
+import InputScreenTemplate from '@/components/templates/InputScreenTemplate'
 import FormSelect from '@/components/FormSelect'
 
 import { required } from 'vuelidate/lib/validators'
@@ -138,7 +137,7 @@ export default {
   name: 'AddGame',
   components: {
     MetadataItem,
-    WizardScreen,
+    WizardScreen: InputScreenTemplate,
     ModalPlayerSelect,
     ModalGameSelect,
     FormSelect,

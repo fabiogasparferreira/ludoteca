@@ -1,18 +1,16 @@
-from django.contrib.auth import get_user_model
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
-from rest_framework import viewsets, permissions, generics
-from rest_framework import filters
 from django_filters import rest_framework as django_filters
+from rest_framework import filters
+from rest_framework import viewsets, permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt import authentication
 
-from backend.api.filters import LibraryGameFilter
-from backend.api.models import *
-from backend.api.serializers import *
 from backend.api import utils
+from backend.api.filters import LibraryGameFilter
+from backend.api.serializers import *
 
 User = get_user_model()
 
